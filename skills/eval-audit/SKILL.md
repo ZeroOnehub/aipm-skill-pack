@@ -6,7 +6,7 @@ whenToUse: 接手现有的评测体系、怀疑评测结果不可信，或者完
 
 # 评测体检
 
-> 改编自 [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) 的 `eval-audit`（MIT，Hamel Husain）。改动：中文化；名字改为 `eval-audit`；引用的同仓库 skill 名换成本合集里的名字；产出物默认存进 AIPM 工坊的评测目录。
+> 改编自 [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) 的 `eval-audit`（MIT，Hamel Husain）。改动：中文化；名字改为 `eval-audit`；引用的同仓库 skill 名换成本合集里的名字；产出物默认存进拾阶的评测目录。
 
 检查一套 AI 评测流程，输出按优先级排序的问题清单和具体的下一步。
 
@@ -144,4 +144,4 @@ whenToUse: 接手现有的评测体系、怀疑评测结果不可信，或者完
 
 ## 产出位置
 
-在 AIPM 工坊里存到当前项目的 `05-评测/评测体检-<日期>.md`。
+在拾阶里存到当前项目的 `05-评测/评测体检-<日期>.md`。

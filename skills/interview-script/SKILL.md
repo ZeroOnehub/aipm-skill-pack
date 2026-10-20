@@ -6,7 +6,7 @@ whenToUse: 要去做用户访谈、需要一份不带诱导的提纲时。立项
 
 # 用户访谈提纲
 
-> 改编自 [phuryn/pm-skills](https://github.com/phuryn/pm-skills) 的 `interview-script`（MIT，Paweł Huryn）。改动：中文化；补了中文访谈常见坑；产出物默认存进 AIPM 工坊的立项目录。
+> 改编自 [phuryn/pm-skills](https://github.com/phuryn/pm-skills) 的 `interview-script`（MIT，Paweł Huryn）。改动：中文化；补了中文访谈常见坑；产出物默认存进拾阶的立项目录。
 
 目标：拿到**真实的过去行为**，不是听用户对你的点子发表意见。原则来自《The Mom Test》：问对方的生活，不问你的点子。
 
@@ -106,7 +106,7 @@ whenToUse: 要去做用户访谈、需要一份不带诱导的提纲时。立项
 
 ## 产出
 
-提纲和记录表写成一个 Markdown 文件，例如 `访谈提纲-<主题>.md`。在 AIPM 工坊里，放进当前项目的 `01-立项/`。
+提纲和记录表写成一个 Markdown 文件，例如 `访谈提纲-<主题>.md`。在拾阶里，放进当前项目的 `01-立项/`。
 
 ## 延伸阅读
 

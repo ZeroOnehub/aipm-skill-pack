@@ -2,7 +2,7 @@
 # 安装 AIPM Skill Pack。
 #
 #   ./install.sh <skills 目录>          把每个 skill 链接进去，例如 ~/.claude/skills、~/.codex/skills
-#   ./install.sh --workspace <工作区>   给 AIPM 工坊 / DeepSeek Harness 的工作区建 .dsh/skills 链接
+#   ./install.sh --workspace <工作区>   给拾阶 / DeepSeek Harness 的工作区建 .dsh/skills 链接
 #
 # 只建符号链接，不复制文件；目标位置已有同名的真实目录时跳过，不覆盖。
 set -euo pipefail

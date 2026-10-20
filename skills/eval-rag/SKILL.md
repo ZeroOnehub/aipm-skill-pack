@@ -6,7 +6,7 @@ whenToUse: 产品里有知识库问答、文档问答或任何检索增强生成
 
 # 评测 RAG
 
-> 改编自 [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) 的 `evaluate-rag`（MIT，Hamel Husain）。改动：中文化；名字改为 `eval-rag`；产出物默认存进 AIPM 工坊的评测目录。公式和流程保持原样。
+> 改编自 [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) 的 `evaluate-rag`（MIT，Hamel Husain）。改动：中文化；名字改为 `eval-rag`；产出物默认存进拾阶的评测目录。公式和流程保持原样。
 
 ## 总览
 
@@ -175,4 +175,4 @@ TwoHopRecall@k = (1/N) * sum(1 if {分块1, 分块2} ⊆ 前k个结果)
 
 ## 产出位置
 
-在 AIPM 工坊里存到当前项目的 `05-评测/`：`RAG评测-<日期>.md`（失败归因、检索评测集说明、各指标结果、分块实验表、生成质量结论）。
+在拾阶里存到当前项目的 `05-评测/`：`RAG评测-<日期>.md`（失败归因、检索评测集说明、各指标结果、分块实验表、生成质量结论）。

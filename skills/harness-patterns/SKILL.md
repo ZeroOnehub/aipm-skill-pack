@@ -1,7 +1,7 @@
 ---
 name: harness-patterns
 description: AI Agent 的 Harness 设计模式（中文）：记忆、技能、工具与权限、上下文工程、多 Agent 委派、Hook 生命周期、启动序列。从 Claude Code 源码里提炼，讲清每个模式解决什么问题、怎么做、有什么取舍和坑。产品经理用它设计 Agent 类产品的 AI 方案，或者按「优势→劣势→冲突点→要不要加→兜底」准备 Harness 相关的面试题和分享。用户说「设计 Agent 的记忆/权限」「上下文怎么管」「要不要上多 Agent」「讲讲 Harness」「Agent 为什么不可控」时使用。
-whenToUse: 做 Agent 类产品的 AI 方案设计（AIPM 工坊第 04 阶段），或者要把某个 Harness 环节讲清楚时。
+whenToUse: 做 Agent 类产品的 AI 方案设计（拾阶第 04 阶段），或者要把某个 Harness 环节讲清楚时。
 ---
 
 # Agent Harness 设计模式
@@ -14,7 +14,7 @@ whenToUse: 做 Agent 类产品的 AI 方案设计（AIPM 工坊第 04 阶段）�
 
 ### 1. 写 AI 方案时：每个环节过一遍这张表
 
-在 AIPM 工坊里，把结果写进当前项目 `04-AI方案设计/Agent方案.md`：
+在拾阶里，把结果写进当前项目 `04-AI方案设计/Agent方案.md`：
 
 | 环节 | 要回答的产品问题 | 对应章节 |
 |---|---|---|

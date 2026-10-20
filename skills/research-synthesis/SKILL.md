@@ -6,7 +6,7 @@ whenToUse: 手上有一堆访谈记录、问卷结果或用户反馈，需要变
 
 # 调研综合
 
-> 改编自 [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) 产品管理插件的 `synthesize-research`（Apache-2.0，Anthropic）。改动：中文化；去掉对 Claude 连接器的依赖；加入 AIPM 工坊的证据标签；精简部分重复内容。本文件相对原文有修改。
+> 改编自 [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) 产品管理插件的 `synthesize-research`（Apache-2.0，Anthropic）。改动：中文化；去掉对 Claude 连接器的依赖；加入拾阶的证据标签；精简部分重复内容。本文件相对原文有修改。
 
 把多个来源的用户研究综合成结构化洞察和建议。
 
@@ -171,4 +171,4 @@ whenToUse: 手上有一堆访谈记录、问卷结果或用户反馈，需要变
 - 建议要具体到能执行。「改进新手引导」不能执行，「在设置流程里加进度条」可以。
 - 5–8 条强发现胜过 20 条弱发现。
 
-在 AIPM 工坊里，报告存为当前项目 `01-立项/` 下的 `调研综合-<主题>.md`，可作为立项第 02 站产物「用户画像与调研结论」的输入。
+在拾阶里，报告存为当前项目 `01-立项/` 下的 `调研综合-<主题>.md`，可作为立项第 02 站产物「用户画像与调研结论」的输入。

@@ -6,7 +6,7 @@ whenToUse: 错误分析找出了某个需要主观判断的失败类别、并且
 
 # 写大模型评委提示词
 
-> 改编自 [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) 的 `write-judge-prompt`（MIT，Hamel Husain）。改动：中文化；示例改成中文场景；名字改为 `eval-judge-prompt`；产出物默认存进 AIPM 工坊的评测目录。
+> 改编自 [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) 的 `write-judge-prompt`（MIT，Hamel Husain）。改动：中文化；示例改成中文场景；名字改为 `eval-judge-prompt`；产出物默认存进拾阶的评测目录。
 
 为**一种**具体失败设计一个只判通过 / 失败的大模型评委。一个评委只查一件事。
 
@@ -125,4 +125,4 @@ whenToUse: 错误分析找出了某个需要主观判断的失败类别、并且
 
 ## 产出位置
 
-在 AIPM 工坊里存到当前项目的 `05-评测/评委/`，一个失败类别一个文件，如 `评委-语气匹配.md`。
+在拾阶里存到当前项目的 `05-评测/评委/`，一个失败类别一个文件，如 `评委-语气匹配.md`。

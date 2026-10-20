@@ -1,12 +1,12 @@
 ---
 name: eval-error-analysis
 description: 错误分析：带用户逐条阅读 AI 系统的运行轨迹（trace），判断通过或失败，记下第一个出错的地方，把失败归成 5～10 个具体可行动的类别，算出各类失败率，再决定哪些直接修、哪些值得做评估器。用户说「做错误分析」「看看 AI 哪里答得不好」「整理 badcase」「评测从哪开始」「模型换了要不要重测」时使用。这是 AI 评测的第一步。
-whenToUse: 新开一个评测项目时；换模型、改提示词、加新功能之后；线上指标下降或出了事故之后。AIPM 工坊第 05 阶段「评测」的起点。
+whenToUse: 新开一个评测项目时；换模型、改提示词、加新功能之后；线上指标下降或出了事故之后。拾阶第 05 阶段「评测」的起点。
 ---
 
 # 错误分析
 
-> 改编自 [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) 的 `error-analysis`（MIT，Hamel Husain，配套课程「AI Evals For Engineers & PMs」）。改动：中文化；示例改成中文场景；名字统一加 `eval-` 前缀；产出物默认存进 AIPM 工坊的评测目录。
+> 改编自 [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) 的 `error-analysis`（MIT，Hamel Husain，配套课程「AI Evals For Engineers & PMs」）。改动：中文化；示例改成中文场景；名字统一加 `eval-` 前缀；产出物默认存进拾阶的评测目录。
 
 带用户阅读 AI 系统的运行轨迹，建一份「系统是怎么失败的」清单。
 
@@ -164,4 +164,4 @@ failure_rates.sort_values(ascending=False)
 
 ## 产出位置
 
-在 AIPM 工坊里存到当前项目的 `05-评测/`：`错误分析-<日期>.md`（失败类别、定义、失败率、处理决定）和标注表（csv 或 md 表格）。
+在拾阶里存到当前项目的 `05-评测/`：`错误分析-<日期>.md`（失败类别、定义、失败率、处理决定）和标注表（csv 或 md 表格）。

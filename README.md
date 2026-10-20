@@ -1,8 +1,8 @@
 # AIPM Skill Pack
 
-**AI 产品经理用的 17 个 Agent Skill，从用户调研一路覆盖到上线复盘。** 全部中文化，按「立项 → PRD → 原型 → AI 方案 → 评测 → 复盘」六个阶段组织。它们是从 7 个开源项目里挑出来改编的，任何认 `SKILL.md` 格式的 Agent 都能用（DeepSeek Harness、Claude Code、Codex、OpenClaw 等）。
+**AI 产品经理用的 19 个 Agent Skill，从立项一路覆盖到上线复盘。** 全部中文，按「立项 → PRD → 原型 → AI 方案 → 评测 → 复盘」六个阶段组织：2 个流程 skill（总控、立项）是我自己写的，17 个工具 skill 是从 7 个开源项目里挑出来改编的。任何认 `SKILL.md` 格式的 Agent 都能用（DeepSeek Harness、Claude Code、Codex、OpenClaw 等）。
 
-这套 skill 是 [AIPM 工坊](https://github.com/ZeroOnehub/aipm-workbench)（我基于 DeepSeek Harness 做的 AI 产品经理工作台）第 02～06 阶段的工具层，单独拿出来也能用。
+这套 skill 是 [拾阶](https://github.com/ZeroOnehub/aipm-workbench)（我基于 DeepSeek Harness 做的 AI 产品工作台）的全部 skill：总控按项目进度把活派给各阶段的 skill。单独拿出来也能用。
 
 ---
 
@@ -10,7 +10,9 @@
 
 | 阶段 | skill | 一句话 |
 |---|---|---|
-| 01 立项 · 调研 | [`interview-script`](#interview-script用户访谈提纲) | 写不带诱导的用户访谈提纲 |
+| 总控 | [`aipm-hub`](#aipm-hub总控) | 新建 / 打开项目，讲清走到哪一步，把活派给对的阶段 skill，维护进度文件 `aipm.json` |
+| 01 立项 | [`project-initiation`](#project-initiation立项教练) | 六站立项教练，产出写给老板拍板的立项报告 |
+| | [`interview-script`](#interview-script用户访谈提纲) | 写不带诱导的用户访谈提纲 |
 | | [`research-synthesis`](#research-synthesis调研综合) | 把访谈、问卷、反馈综合成带证据的洞察 |
 | 02 PRD | [`prd`](#prd写-ai-产品的-prd) | 分六站写 AI 产品 PRD，必须写清 AI 能力边界和评测样例 |
 | | [`prd-review`](#prd-reviewprd-质量审查) | 按 14 个维度给 PRD 挑刺 |
@@ -32,14 +34,14 @@
 
 ## 安装
 
-### AIPM 工坊 / DeepSeek Harness
+### 拾阶 / DeepSeek Harness
 
-工坊会扫描「当前工作区/.dsh/skills」，所以只要在工作区里建一个指向本仓库 `skills/` 的链接：
+拾阶会扫描「当前工作区/.dsh/skills」，所以只要在工作区里建一个指向本仓库 `skills/` 的链接：
 
 ```bash
 git clone https://github.com/ZeroOnehub/aipm-skill-pack.git
 cd aipm-skill-pack
-./install.sh --workspace "<你的工坊工作区>"
+./install.sh --workspace "<你的拾阶工作区>"
 ```
 
 链接是整个目录，以后 `git pull` 拿到的新 skill 会自动生效，不用重启。
@@ -59,7 +61,21 @@ cd aipm-skill-pack
 
 ## 每个 skill 干什么、怎么用
 
-> 「试试这样说」里的话可以直接复制使用。在 AIPM 工坊里，产出物会自动放进当前项目对应的阶段目录。
+> 「试试这样说」里的话可以直接复制使用。在拾阶里，产出物会自动放进当前项目对应的阶段目录。
+
+### `aipm-hub`：总控
+
+- **干什么**：一个项目一个文件夹，进度记在项目根目录的 `aipm.json`。总控负责新建或打开项目、告诉你现在在哪个阶段哪一站、下一步做什么，然后把工作交给对应阶段的 skill（立项交给 `project-initiation`，PRD 交给 `prd`……）。它自己不写产出物。
+- **什么时候用**：每次开始或继续一个项目时；不知道下一步该做什么时。
+- **试试这样说**：「新建一个项目，叫『云上非遗』。」「继续上次的项目，现在到哪了？」
+- **产出**：`<项目>/aipm.json`（在拾阶里，右侧项目面板读它显示进度）
+
+### `project-initiation`：立项教练
+
+- **干什么**：从一句话想法或零散材料出发，六站推进：把问题说清 → 找到真用户 → 收进需求池 → 看清对手 → 排出先后（MVP）→ 拍板立项。前三站是关卡制，证据不够不放行；每个结论都要标证据来源（用户原话、行为数据、公开资料、测算、AI 推断……），没证据的标「待验证」。还会做假设地图、事前验尸、AI 程度判断，最后给出做 / 先小范围验证 / 不做 / 暂不出结论，并写下可以事后对照的预测。支持 0→1 新项目和 1→N 存量产品规划。
+- **什么时候用**：有个想法要不要做；要写立项报告给老板拍板。不写 PRD（PRD 用 `prd`）。
+- **试试这样说**：「我想做一个帮跨境电商运营写上新文案的 AI 工具，帮我立项。」
+- **产出**：`01-立项/` 下的问题定义卡、用户画像与调研结论、需求池、竞品分析、MVP 范围表，以及 `立项报告.md` 和 `立项报告.html`
 
 ### `interview-script`：用户访谈提纲
 
@@ -80,7 +96,7 @@ cd aipm-skill-pack
 - **干什么**：以立项报告为输入，分六站推进：对齐输入 → 写清价值 → 拆功能和故事 → 划 AI 能力边界 → 定指标和上线条件 → 成稿自检。默认写 1～3 页的精简版，每个 P0 功能都有 Given/When/Then 验收标准。AI 功能必须写清「AI 负责什么、不负责什么、错了怎么兜、人在哪接手」，并附至少 5 条评测样例。有关卡和红线，比如全是 P0、没有停止条件，都过不了。
 - **什么时候用**：立项通过后写需求；或者手上有个功能想法，要一份能拿去评审的文档。
 - **试试这样说**：「根据立项报告写 PRD。」/「我想做一个帮运营自动写周报的 AI 功能，帮我写个 PRD。」
-- **产出**：`PRD.md`、`00-PRD档案.md`（在工坊里会同步更新右侧进度面板）
+- **产出**：`PRD.md`、`00-PRD档案.md`（在拾阶里会同步更新右侧进度面板）
 
 ### `prd-review`：PRD 质量审查
 
@@ -187,7 +203,7 @@ cd aipm-skill-pack
 1. **选型**：从 GitHub 上的 PM skill 合集里挑。协议必须允许二次开发（MIT / Apache-2.0）；内容必须讲方法，不能只是模板；和 AI 产品相关的优先。
 2. **中文化**：正文全部翻译或改写成中文，触发描述也改成中文的说法，这样用中文提需求才能命中。示例尽量换成中文场景。
 3. **适配 DeepSeek Harness**：它只认根目录下一层的 `<名字>/SKILL.md`，所以把嵌套目录拆平；名字统一成小写加连字符；frontmatter 补上 `whenToUse`；去掉对 Claude 专属连接器和仓库内其他 skill 的依赖。
-4. **接进工作流**：每个 skill 都写明在 AIPM 工坊里读什么输入、产物放进哪个阶段目录，前后阶段能串起来。
+4. **接进工作流**：每个 skill 都写明在拾阶里读什么输入、产物放进哪个阶段目录，前后阶段能串起来。
 5. **补 AI 产品的内容**：比如 PRD 的「AI 能力边界」和评测样例、原型的 AI 状态清单、指标复盘的 AI 指标、上线复盘对照立项预测。
 6. **合并降噪**：系统提示词原本是 15 个独立 skill，合成一个入口加 15 份按需读的参考资料，避免技能目录被挤满、模型挑错 skill。
 7. **评测类统一加 `eval-` 前缀**，在技能列表里排在一起。
@@ -205,7 +221,9 @@ cd aipm-skill-pack
 | `system-prompt-design` | [kangarooking/system-prompt-skills](https://github.com/kangarooking/system-prompt-skills) | MIT | kangarooking |
 | `eval-*`（7 个） | [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) | MIT | Hamel Husain |
 
-每个 skill 目录里都附有上游的 LICENSE（`prd-review` 另附原仓库的 NOTICE），每个 `SKILL.md` 开头写明了改编来源和改动。本仓库自己写的部分（README、`install.sh`、`prd` 里新增的内容和模板）用 MIT 协议，见 [LICENSE](LICENSE)。完整的第三方声明见 [NOTICE.md](NOTICE.md)。
+`aipm-hub` 和 `project-initiation` 是我自己写的。立项的两份参考资料（假设地图与验证实验、事前验尸）借鉴了 [phuryn/pm-skills](https://github.com/phuryn/pm-skills) 和 [caalvinz/opportunity-discovery-skill](https://github.com/caalvinz/opportunity-discovery-skill)（都是 MIT）的方法，文字是改写的，来源写在各文件开头。
+
+改编的 skill 目录里都附有上游的 LICENSE（`prd-review` 另附原仓库的 NOTICE），每个 `SKILL.md` 开头写明了改编来源和改动。本仓库自己写的部分（两个流程 skill、README、`install.sh`、`prd` 里新增的内容和模板）用 MIT 协议，见 [LICENSE](LICENSE)。完整的第三方声明见 [NOTICE.md](NOTICE.md)。
 
 ### 看过但没收进来的
 

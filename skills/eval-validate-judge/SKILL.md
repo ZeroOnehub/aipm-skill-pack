@@ -6,7 +6,7 @@ whenToUse: 用 eval-judge-prompt 写好评委之后、正式用它的结果做�
 
 # 校准大模型评委
 
-> 改编自 [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) 的 `validate-evaluator`（MIT，Hamel Husain）。改动：中文化；名字改为 `eval-validate-judge`；补了向非技术干系人汇报的写法；产出物默认存进 AIPM 工坊的评测目录。代码和公式保持原样。
+> 改编自 [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) 的 `validate-evaluator`（MIT，Hamel Husain）。改动：中文化；名字改为 `eval-validate-judge`；补了向非技术干系人汇报的写法；产出物默认存进拾阶的评测目录。代码和公式保持原样。
 
 让大模型评委和人的判断对齐。
 
@@ -219,4 +219,4 @@ print(f"95% CI: [{lower:.2f}, {upper:.2f}]")
 
 ## 产出位置
 
-在 AIPM 工坊里存到当前项目的 `05-评测/`：`评委校准-<失败类别>.md`（切分方式、开发集迭代记录、测试集 TPR / TNR、修正后成功率和置信区间）。
+在拾阶里存到当前项目的 `05-评测/`：`评委校准-<失败类别>.md`（切分方式、开发集迭代记录、测试集 TPR / TNR、修正后成功率和置信区间）。

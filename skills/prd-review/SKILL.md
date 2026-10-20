@@ -1,12 +1,12 @@
 ---
 name: prd-review
 description: PRD 质量审查（基于杨堃《决胜B端》14 维度框架）。逐维度输出发现，每条发现定位到 PRD 的具体章节并给出可执行的改法，最后汇总 P0–P3 问题清单、重大风险和 Top 10 改进建议。用户说「帮我看看这个 PRD」「审一下需求文档」「PRD 有什么问题」「评审前帮我挑刺」「这个方案有什么漏洞」时使用。要从零写 PRD 时用 prd。
-whenToUse: 已经有一份 PRD、需求文档或系统设计文档，想在评审前找出盲区时。在 AIPM 工坊里，prd 成稿后可以用它做第二轮审查。
+whenToUse: 已经有一份 PRD、需求文档或系统设计文档，想在评审前找出盲区时。在拾阶里，prd 成稿后可以用它做第二轮审查。
 ---
 
-> 改编自 [pmYangKun/check-prd-skill](https://github.com/pmYangKun/check-prd-skill)（Apache-2.0，杨堃；方法论来源：《决胜B端（第二版）》《决胜体验设计》）。本文件已作修改：改名为 `prd-review`；改写触发描述；增加「在 AIPM 工坊里」和「C 端与 AI 产品的适配」两节。审查维度、规则和 references/ 下的参考资料保持原样。原仓库的 NOTICE 一并保留在本目录。
+> 改编自 [pmYangKun/check-prd-skill](https://github.com/pmYangKun/check-prd-skill)（Apache-2.0，杨堃；方法论来源：《决胜B端（第二版）》《决胜体验设计》）。本文件已作修改：改名为 `prd-review`；改写触发描述；增加「在拾阶里」和「C 端与 AI 产品的适配」两节。审查维度、规则和 references/ 下的参考资料保持原样。原仓库的 NOTICE 一并保留在本目录。
 
-## 在 AIPM 工坊里
+## 在拾阶里
 
 - 没指定文件时，默认审查当前项目的 `02-PRD/PRD.md`，并读 `01-立项/立项报告.md` 作为背景。
 - 审查报告存为 `02-PRD/PRD审查报告.md`；只写报告，不直接改 PRD，改不改由用户决定。

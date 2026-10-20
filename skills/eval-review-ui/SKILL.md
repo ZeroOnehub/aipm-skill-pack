@@ -6,7 +6,7 @@ whenToUse: 做错误分析或评委校准需要大量人工标注、而表格或
 
 # 做标注工具
 
-> 改编自 [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) 的 `build-review-interface`（MIT，Hamel Husain）。改动：中文化；名字改为 `eval-review-ui`；产出物默认存进 AIPM 工坊的评测目录。
+> 改编自 [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) 的 `build-review-interface`（MIT，Hamel Husain）。改动：中文化；名字改为 `eval-review-ui`；产出物默认存进拾阶的评测目录。
 
 ## 总览
 
@@ -97,4 +97,4 @@ Cmd+S = 保存      Cmd+Enter = 保存并下一条
 
 ## 产出位置
 
-在 AIPM 工坊里存到当前项目的 `05-评测/标注工具/`：`index.html`、示例数据和使用说明。
+在拾阶里存到当前项目的 `05-评测/标注工具/`：`index.html`、示例数据和使用说明。

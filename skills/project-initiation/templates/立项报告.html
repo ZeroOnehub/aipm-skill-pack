@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{项目名}} · 立项报告</title>
+<!--
+使用说明（成稿时删除本注释）：
+1. 复制本文件为 立项报告.html，保留 <style> 和组件结构，把 {{占位符}} 换成内容。
+2. 每个组件上方有一行「组件：xxx」注释，不需要的组件整段删掉。
+3. 证据标签统一用 <span class="tag t-xxx">，类型见文末「证据标签」组件。
+4. 不引入任何外部脚本、字体或图片，保证离线能打开。
+5. 成稿后全文搜索「{{」确认没有残留占位符；内容必须与 立项报告.md 一致。
+-->
+<style>
+/* ---------- 设计变量 ---------- */
+:root {
+  --lime: #c8f04b;
+  --blue: #2764f2;
+  --orange: #ff6b35;
+  --teal: #00a48f;
+  --red: #d93d3d;
+  --purple: #7c5cff;
+  --ink: #151a18;
+  --paper: #f3f0e8;
+  --card: #fffef9;
+  --line: rgba(21, 26, 24, 0.08);
+  --muted: rgba(21, 26, 24, 0.62);
+  --faint: rgba(21, 26, 24, 0.42);
+  --radius: 18px;
+  --shadow: 0 18px 45px rgba(26, 31, 29, 0.08);
+  --font-display: "DIN Alternate", "Avenir Next", -apple-system, "Helvetica Neue", sans-serif;
+  --font-sans: "Avenir Next", "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", -apple-system, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(rgba(21, 26, 24, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 26, 24, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+b, strong { font-weight: 700; }
+
+/* ---------- 顶部阅读进度 ---------- */
+.progress { position: fixed; top: 0; left: 268px; right: 0; height: 4px; background: rgba(21,26,24,0.05); z-index: 50; }
+.progress-bar { height: 100%; width: 0; background: var(--blue); }
+
+/* ---------- 左侧目录 ---------- */
+.sidebar {
+  position: fixed; inset: 0 auto 0 0; width: 268px;
+  background: var(--ink); color: #fffef9; padding: 32px 22px;
+  display: flex; flex-direction: column; gap: 26px; overflow-y: auto; z-index: 40;
+}
+.brand-name { font-family: var(--font-display); font-size: 21px; font-weight: 900; letter-spacing: -0.4px; line-height: 1.3; }
+.brand-name span { color: var(--lime); }
+.brand-sub { font-size: 11px; color: rgba(255,254,249,0.42); letter-spacing: 1.5px; margin-top: 6px; }
+.verdict-pill { display: inline-block; margin-top: 14px; font-size: 12px; font-weight: 800; padding: 5px 12px; border-radius: 999px; background: var(--lime); color: var(--ink); }
+.verdict-pill.no { background: var(--red); color: #fffef9; }
+.verdict-pill.cond { background: var(--orange); color: #fffef9; }
+.nav { display: flex; flex-direction: column; gap: 2px; }
+.nav a {
+  display: flex; gap: 10px; align-items: baseline; padding: 8px 12px; border-radius: 9px;
+  color: rgba(255,254,249,0.6); text-decoration: none; font-size: 13px; border-left: 2px solid transparent;
+}
+.nav a:hover { background: rgba(255,254,249,0.06); color: #fffef9; }
+.nav a.active { background: rgba(200,240,75,0.12); color: var(--lime); border-left-color: var(--lime); font-weight: 600; }
+.nav-num { font-family: var(--font-display); font-size: 10.5px; opacity: 0.5; width: 16px; flex-shrink: 0; }
+.side-foot { margin-top: auto; font-size: 11px; color: rgba(255,254,249,0.32); line-height: 1.7; border-top: 1px solid rgba(255,254,249,0.08); padding-top: 16px; }
+
+/* ---------- 正文 ---------- */
+.main { margin-left: 268px; padding: 52px 56px 96px; max-width: 1160px; }
+section { margin-bottom: 72px; scroll-margin-top: 24px; }
+.sec-label { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 2.5px; color: var(--blue); margin-bottom: 8px; }
+.sec-title { font-size: 30px; font-weight: 800; letter-spacing: -0.6px; line-height: 1.3; }
+.sec-lead { font-size: 15.5px; line-height: 1.8; margin-top: 14px; max-width: 860px; padding: 14px 18px; background: var(--card); border-radius: 12px; border-left: 4px solid var(--ink); }
+.sub { font-size: 17px; font-weight: 800; margin: 34px 0 14px; display: flex; align-items: center; gap: 10px; }
+.sub::before { content: ''; width: 4px; height: 17px; background: var(--blue); border-radius: 2px; flex-shrink: 0; }
+.sub .opt { font-size: 11px; font-weight: 700; color: var(--faint); border: 1px solid var(--line); padding: 1px 7px; border-radius: 5px; }
+p.txt { font-size: 14px; line-height: 1.85; color: rgba(21,26,24,0.8); max-width: 860px; margin: 10px 0; }
+.src-line { font-size: 12px; color: var(--faint); margin-top: 18px; }
+
+/* ---------- 封面 ---------- */
+.hero { margin-bottom: 44px; }
+.hero-eyebrow { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 3px; color: var(--blue); margin-bottom: 12px; }
+.hero-title { font-size: 42px; font-weight: 900; letter-spacing: -1.2px; line-height: 1.18; }
+.hero-title em { font-style: normal; color: var(--blue); }
+.hero-sub { font-size: 16px; line-height: 1.75; color: var(--muted); margin-top: 14px; max-width: 840px; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 20px; font-size: 12.5px; color: var(--faint); }
+.hero-meta b { color: var(--ink); font-weight: 600; }
+
+/* ---------- 组件：一页纸结论 ---------- */
+.onepage { background: var(--ink); color: #fffef9; border-radius: var(--radius); padding: 30px 32px; border-left: 6px solid var(--lime); }
+.op-q { font-size: 13px; color: rgba(255,254,249,0.55); margin-bottom: 10px; }
+.op-q b { color: #fffef9; }
+.op-verdict { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; }
+.op-badge { font-size: 15px; font-weight: 900; padding: 6px 14px; border-radius: 8px; background: var(--lime); color: var(--ink); white-space: nowrap; }
+.op-badge.no { background: var(--red); color: #fffef9; }
+.op-badge.cond { background: var(--orange); color: #fffef9; }
+.op-badge.park { background: rgba(255,254,249,0.16); color: #fffef9; border: 1px solid rgba(255,254,249,0.35); }
+.op-text { font-size: 19px; font-weight: 700; line-height: 1.55; flex: 1; min-width: 260px; }
+.op-logic { margin-top: 20px; padding: 14px 18px; border: 1px dashed rgba(200,240,75,0.45); border-radius: 12px; font-family: var(--font-display); color: var(--lime); font-size: 16px; font-weight: 700; }
+.op-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 20px; }
+.op-cell { background: rgba(255,254,249,0.06); border-radius: 12px; padding: 14px 16px; }
+.op-k { font-family: var(--font-display); font-size: 10.5px; letter-spacing: 1.5px; color: rgba(255,254,249,0.45); margin-bottom: 6px; }
+.op-v { font-size: 13.5px; line-height: 1.7; }
+.op-ask { margin-top: 20px; background: rgba(200,240,75,0.1); border-radius: 12px; padding: 14px 18px; }
+.op-ask .op-k { color: var(--lime); }
+.op-ask ol { padding-left: 20px; font-size: 14px; line-height: 1.85; }
+
+/* ---------- 组件：问题 → 行动 ---------- */
+.pa { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+.pa-row { display: grid; grid-template-columns: 1fr 34px 1fr 60px; gap: 12px; align-items: stretch; }
+.pa-p, .pa-a { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; font-size: 13.5px; line-height: 1.7; }
+.pa-p { border-left: 4px solid var(--red); }
+.pa-a { border-left: 4px solid var(--teal); }
+.pa-p small, .pa-a small { display: block; color: var(--faint); font-size: 11.5px; margin-top: 4px; }
+.pa-arrow { display: flex; align-items: center; justify-content: center; color: var(--faint); font-size: 18px; }
+.pa-pri { display: flex; align-items: center; justify-content: center; }
+
+/* ---------- 优先级 / 状态徽章 ---------- */
+.pri { display: inline-block; font-family: var(--font-display); font-size: 11px; font-weight: 800; letter-spacing: 1px; padding: 4px 9px; border-radius: 6px; color: #fffef9; white-space: nowrap; }
+.p0 { background: var(--red); }
+.p1 { background: var(--orange); }
+.p2 { background: var(--blue); }
+.p3 { background: rgba(21,26,24,0.4); }
+
+/* ---------- 组件：指标卡 ---------- */
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 20px 0; }
+.metric { background: var(--ink); color: #fffef9; border-radius: 14px; padding: 20px 18px; }
+.m-k { font-family: var(--font-display); font-size: 10.5px; letter-spacing: 1.4px; color: rgba(255,254,249,0.45); margin-bottom: 10px; }
+.m-v { font-family: var(--font-display); font-size: 30px; font-weight: 900; letter-spacing: -1px; line-height: 1.1; }
+.m-v.good { color: var(--lime); }
+.m-v.bad { color: #ff8a8a; }
+.m-n { font-size: 11.5px; color: rgba(255,254,249,0.5); margin-top: 8px; line-height: 1.5; }
+
+/* ---------- 组件：问题定义卡 ---------- */
+.define { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.define-q { padding: 22px 26px; font-size: 18px; font-weight: 800; line-height: 1.6; border-bottom: 1px solid var(--line); }
+.define-q::before { content: '问题定义'; display: block; font-family: var(--font-display); font-size: 10.5px; letter-spacing: 2px; color: var(--blue); margin-bottom: 8px; font-weight: 700; }
+.define-grid { display: grid; grid-template-columns: repeat(5, 1fr); }
+.define-grid > div { padding: 16px 18px; border-right: 1px solid var(--line); font-size: 13px; line-height: 1.7; }
+.define-grid > div:last-child { border-right: none; }
+.define-grid i { display: block; font-style: normal; font-size: 11px; font-weight: 700; color: var(--faint); margin-bottom: 4px; }
+
+/* ---------- 组件：漏斗 ---------- */
+.formula { background: var(--ink); color: var(--lime); border-radius: 14px; padding: 18px 22px; font-family: var(--font-display); font-size: 18px; font-weight: 800; text-align: center; margin: 14px 0 22px; }
+.funnel { display: flex; flex-direction: column; gap: 4px; }
+.f-step { display: grid; grid-template-columns: 110px 1fr; gap: 16px; align-items: center; }
+.f-label { font-size: 13px; font-weight: 600; text-align: right; color: var(--muted); }
+.f-bar { height: 42px; border-radius: 8px; background: var(--blue); color: #fffef9; display: flex; align-items: center; padding: 0 16px; font-family: var(--font-display); font-weight: 800; font-size: 14px; white-space: nowrap; }
+.f-drop { grid-column: 2; font-size: 12.5px; color: var(--red); font-weight: 600; padding: 3px 0 6px 18px; }
+.f-drop.crit { font-weight: 800; }
+
+/* ---------- 表格 ---------- */
+.tbl-wrap { overflow-x: auto; margin: 14px 0; border-radius: 14px; box-shadow: var(--shadow); }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--card); min-width: 560px; }
+thead { background: var(--ink); color: #fffef9; }
+th { padding: 12px 14px; text-align: left; font-size: 12px; letter-spacing: 0.6px; font-weight: 700; white-space: nowrap; }
+td { padding: 12px 14px; border-bottom: 1px solid var(--line); line-height: 1.65; vertical-align: top; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: rgba(39,100,242,0.03); }
+td.us { background: rgba(39,100,242,0.05); font-weight: 600; }
+.good-t { color: var(--teal); font-weight: 800; }
+.bad-t { color: var(--red); font-weight: 800; }
+.num { font-family: var(--font-display); font-weight: 700; }
+
+/* ---------- 组件：用户卡 / 引语 ---------- */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.pcard { background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--blue); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow); }
+.pc-who { font-size: 16px; font-weight: 800; }
+.pc-tag { font-size: 11.5px; color: var(--faint); margin: 2px 0 12px; }
+.pc-row { font-size: 13px; line-height: 1.7; padding: 8px 0; border-top: 1px solid var(--line); }
+.pc-row i { font-style: normal; display: block; font-size: 11px; font-weight: 700; color: var(--faint); }
+.quote { background: rgba(0,164,143,0.06); border: 1px solid rgba(0,164,143,0.2); border-left: 4px solid var(--teal); border-radius: 12px; padding: 16px 20px; margin: 16px 0; font-size: 14px; line-height: 1.8; }
+.quote cite { display: block; font-style: normal; font-size: 12px; color: var(--faint); margin-top: 6px; }
+.strength { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; font-weight: 700; margin-top: 8px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* ---------- 提示块 ---------- */
+.callout { background: var(--ink); color: #fffef9; border-radius: var(--radius); padding: 24px 28px; margin: 20px 0; border-left: 5px solid var(--lime); font-size: 16px; line-height: 1.75; }
+.callout b { color: var(--lime); }
+.callout .k { font-family: var(--font-display); font-size: 11px; letter-spacing: 2px; color: var(--lime); margin-bottom: 8px; font-weight: 700; display: block; }
+.note, .warn { border-radius: 12px; padding: 16px 20px; margin: 16px 0; font-size: 13.5px; line-height: 1.8; }
+.note { background: rgba(39,100,242,0.05); border: 1px solid rgba(39,100,242,0.18); border-left: 4px solid var(--blue); }
+.warn { background: rgba(217,61,61,0.06); border: 1px solid rgba(217,61,61,0.22); border-left: 4px solid var(--red); }
+.note b { color: var(--blue); }
+.warn b { color: var(--red); }
+
+/* ---------- 组件：旅程对比 ---------- */
+.jn-head, .jn-row { display: grid; grid-template-columns: 150px 1fr 1fr 180px; gap: 14px; }
+.jn-head { font-family: var(--font-display); font-size: 11px; letter-spacing: 1.4px; font-weight: 700; padding-bottom: 10px; }
+.jn-head .h-now { color: var(--faint); }
+.jn-head .h-tgt { color: var(--teal); }
+.jn-head .h-mx { color: var(--blue); }
+.jn-row { padding: 16px 0; border-top: 1px solid var(--line); }
+.jn-step { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; font-weight: 800; line-height: 1.45; }
+.jn-num { font-family: var(--font-display); font-size: 12px; color: #fffef9; background: var(--ink); width: 24px; height: 24px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.jn-now, .jn-tgt, .jn-mx { font-size: 13px; line-height: 1.7; border-radius: 12px; padding: 12px 14px; }
+.jn-now { background: rgba(21,26,24,0.04); color: var(--muted); border: 1px solid var(--line); }
+.jn-tgt { background: rgba(0,164,143,0.07); border: 1px solid rgba(0,164,143,0.28); }
+.jn-mx { background: rgba(39,100,242,0.05); border: 1px solid rgba(39,100,242,0.2); }
+.jn-mx b { font-family: var(--font-display); font-size: 14px; display: block; }
+.base-real, .base-tbd { display: inline-block; margin-top: 6px; font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
+.base-real { background: rgba(0,164,143,0.14); color: var(--teal); }
+.base-tbd { background: rgba(255,107,53,0.13); color: var(--orange); }
+
+/* ---------- 组件：差异化公式 ---------- */
+.diff { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+.diff > div { background: var(--card); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow); border-top: 4px solid; font-size: 14px; line-height: 1.7; }
+.diff i { display: block; font-style: normal; font-family: var(--font-display); font-size: 11px; letter-spacing: 1.2px; font-weight: 800; margin-bottom: 6px; }
+.diff .dx { border-top-color: var(--blue); } .diff .dx i { color: var(--blue); }
+.diff .dy { border-top-color: var(--teal); } .diff .dy i { color: var(--teal); }
+.diff .dz { border-top-color: var(--orange); } .diff .dz i { color: var(--orange); }
+
+/* ---------- 组件：决策矩阵 ---------- */
+.matrix { display: flex; flex-direction: column; gap: 10px; }
+.mx-row { display: grid; grid-template-columns: 150px 170px 1fr; gap: 16px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; }
+.mx-q { font-size: 14.5px; font-weight: 800; }
+.mx-q small { display: block; font-size: 11.5px; color: var(--faint); font-weight: 500; }
+.score { display: flex; gap: 4px; align-items: center; }
+.score span { width: 22px; height: 10px; border-radius: 3px; background: rgba(21,26,24,0.08); }
+.score[data-s="1"] span:nth-child(-n+1), .score[data-s="2"] span:nth-child(-n+2) { background: var(--red); }
+.score[data-s="3"] span:nth-child(-n+3) { background: var(--orange); }
+.score[data-s="4"] span:nth-child(-n+4), .score[data-s="5"] span:nth-child(-n+5) { background: var(--teal); }
+.score em { font-style: normal; font-family: var(--font-display); font-weight: 900; font-size: 16px; margin-left: 8px; }
+.mx-why { font-size: 13px; line-height: 1.7; color: rgba(21,26,24,0.78); }
+
+/* ---------- 组件：范围三栏 ---------- */
+.scope { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 14px; }
+.scope-col { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.scope-h { padding: 12px 18px; color: #fffef9; font-weight: 800; font-size: 14px; }
+.scope-col.must .scope-h { background: var(--teal); }
+.scope-col.not .scope-h { background: var(--red); }
+.scope-col.later .scope-h { background: rgba(21,26,24,0.55); }
+.scope-col ul { list-style: none; }
+.scope-col li { padding: 12px 18px; border-top: 1px solid var(--line); font-size: 13.5px; line-height: 1.6; }
+.scope-col li small { display: block; color: var(--faint); font-size: 12px; margin-top: 2px; }
+.hypo { background: var(--card); border: 2px dashed var(--blue); border-radius: 14px; padding: 18px 22px; font-size: 15.5px; line-height: 1.75; font-weight: 600; }
+.hypo .k { display: block; font-family: var(--font-display); font-size: 11px; letter-spacing: 1.8px; color: var(--blue); margin-bottom: 6px; }
+
+/* ---------- 组件：闸门时间线 ---------- */
+.gates { position: relative; display: flex; flex-direction: column; gap: 14px; padding-left: 30px; margin-top: 10px; }
+.gates::before { content: ''; position: absolute; left: 10px; top: 8px; bottom: 8px; width: 2px; background: rgba(21,26,24,0.12); }
+.gate { position: relative; background: var(--card); border-radius: 14px; box-shadow: var(--shadow); padding: 16px 20px; }
+.gate::before { content: ''; position: absolute; left: -26px; top: 20px; width: 14px; height: 14px; border-radius: 50%; background: var(--blue); border: 3px solid var(--paper); }
+.gate-h { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+.gate-name { font-weight: 800; font-size: 15px; }
+.gate-time { font-family: var(--font-display); font-size: 12px; color: var(--faint); }
+.gate-body { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 10px; font-size: 13px; line-height: 1.65; }
+.gate-body i { display: block; font-style: normal; font-size: 11px; font-weight: 700; color: var(--faint); }
+.gate-fail { margin-top: 10px; font-size: 12.5px; color: var(--red); font-weight: 600; }
+
+/* ---------- 组件：砍需求分层 ---------- */
+.tiers { display: flex; flex-direction: column; gap: 8px; }
+.tier { display: grid; grid-template-columns: 110px 1fr 1fr; gap: 14px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; font-size: 13.5px; line-height: 1.6; }
+.tier-k { font-family: var(--font-display); font-size: 12px; font-weight: 800; color: #fffef9; padding: 5px 10px; border-radius: 6px; text-align: center; }
+.l0 { background: var(--ink); } .l1 { background: var(--teal); } .l2 { background: var(--orange); } .l3 { background: var(--red); }
+
+/* ---------- 组件：AI 四问 ---------- */
+.ai4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.ai-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 22px; border-left: 5px solid var(--purple); }
+.ai-k { font-family: var(--font-display); font-size: 11px; letter-spacing: 1.6px; color: var(--purple); font-weight: 800; }
+.ai-t { font-size: 17px; font-weight: 800; margin: 4px 0 10px; }
+.ai-card p { font-size: 13.5px; line-height: 1.75; color: rgba(21,26,24,0.78); }
+.ai-card.pending { border-left-color: var(--orange); }
+.ai-card.pending .ai-k { color: var(--orange); }
+
+/* ---------- 风险等级 ---------- */
+.lv { font-size: 11.5px; font-weight: 800; padding: 2px 8px; border-radius: 5px; white-space: nowrap; }
+.lv-h { background: rgba(217,61,61,0.12); color: var(--red); }
+.lv-m { background: rgba(255,107,53,0.13); color: var(--orange); }
+.lv-l { background: rgba(0,164,143,0.12); color: var(--teal); }
+.stops { counter-reset: s; display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.stop { counter-increment: s; display: grid; grid-template-columns: 34px 1fr auto; gap: 12px; align-items: center; background: var(--card); border: 1px solid rgba(217,61,61,0.25); border-radius: 12px; padding: 12px 16px; font-size: 13.5px; line-height: 1.6; }
+.stop::before { content: counter(s); font-family: var(--font-display); font-weight: 900; color: #fffef9; background: var(--red); width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+.stop-act { font-size: 12px; font-weight: 800; color: var(--red); white-space: nowrap; }
+
+/* ---------- 证据标签 ---------- */
+.tag { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin: 0 2px; vertical-align: 1px; white-space: nowrap; }
+.t-user, .t-data, .t-test { background: rgba(0,164,143,0.14); color: var(--teal); }
+.t-pub { background: rgba(39,100,242,0.12); color: var(--blue); }
+.t-biz, .t-est { background: rgba(255,107,53,0.14); color: var(--orange); }
+.t-sim { background: rgba(124,92,255,0.14); color: var(--purple); }
+.t-ai { background: rgba(21,26,24,0.08); color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+/* ---------- 折叠附录 ---------- */
+details.ap { background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 10px; overflow: hidden; }
+details.ap > summary { cursor: pointer; padding: 16px 20px; font-weight: 800; font-size: 15px; list-style: none; display: flex; justify-content: space-between; }
+details.ap > summary::-webkit-details-marker { display: none; }
+details.ap > summary::after { content: '展开 ▼'; font-size: 11.5px; color: var(--faint); font-weight: 700; }
+details.ap[open] > summary::after { content: '收起 ▲'; }
+.ap-body { padding: 0 20px 18px; font-size: 13.5px; line-height: 1.8; }
+.ap-body ol { padding-left: 20px; }
+
+/* ---------- 窄屏 ---------- */
+@media (max-width: 960px) {
+  .sidebar { position: static; width: auto; padding: 22px 16px; gap: 14px; }
+  .nav { flex-direction: row; flex-wrap: wrap; }
+  .nav a { padding: 5px 9px; font-size: 12px; }
+  .side-foot { display: none; }
+  .progress { left: 0; }
+  .main { margin-left: 0; padding: 32px 16px 64px; }
+  .hero-title { font-size: 30px; }
+  .sec-title { font-size: 24px; }
+  .op-grid, .grid-3, .grid-2, .metrics, .scope, .diff, .ai4, .gate-body { grid-template-columns: 1fr; }
+  .define-grid { grid-template-columns: 1fr; }
+  .define-grid > div { border-right: none; border-bottom: 1px solid var(--line); }
+  .pa-row { grid-template-columns: 1fr; }
+  .pa-arrow { transform: rotate(90deg); }
+  .jn-head { display: none; }
+  .jn-row, .mx-row, .tier { grid-template-columns: 1fr; }
+  .f-step { grid-template-columns: 1fr; }
+  .f-label { text-align: left; }
+  .f-drop { grid-column: 1; }
+}
+
+/* ---------- 打印 ---------- */
+@media print {
+  body { background: #fff; }
+  .sidebar, .progress { display: none; }
+  .main { margin: 0; padding: 0; max-width: none; }
+  section { break-inside: avoid-page; }
+  details.ap { break-inside: avoid; }
+  details.ap:not([open]) > .ap-body { display: block; }
+  .tbl-wrap, .pcard, .gate, .metric { box-shadow: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+
+<aside class="sidebar">
+  <div>
+    <div class="brand-name">{{项目名}}<br><span>立项报告</span></div>
+    <div class="brand-sub">{{0→1 新项目 / 1→N 阶段规划}}</div>
+    <!-- 结论徽章：做 用默认样式；不做 加 class="no"；有条件做 加 class="cond" -->
+    <span class="verdict-pill cond">结论 · {{有条件做}}</span>
+  </div>
+  <nav class="nav" id="nav">
+    <a href="#s00"><span class="nav-num">00</span>一页纸结论</a>
+    <a href="#s01"><span class="nav-num">01</span>背景与问题</a>
+    <a href="#s02"><span class="nav-num">02</span>用户与场景</a>
+    <a href="#s03"><span class="nav-num">03</span>市场与竞品</a>
+    <a href="#s04"><span class="nav-num">04</span>目标与成功指标</a>
+    <a href="#s05"><span class="nav-num">05</span>方案与第一版范围</a>
+    <a href="#s06"><span class="nav-num">06</span>投入与计划</a>
+    <a href="#s07"><span class="nav-num">07</span>AI 方案四问</a>
+    <a href="#s08"><span class="nav-num">08</span>风险与停止条件</a>
+    <a href="#s09"><span class="nav-num">09</span>决策待办与数据缺口</a>
+    <a href="#sap"><span class="nav-num">附</span>附录</a>
+  </nav>
+  <div class="side-foot">Owner：{{姓名 / 角色}}<br>日期：{{YYYY-MM-DD}}<br>状态：待拍板</div>
+</aside>
+
+<main class="main">
+
+  <!-- ===== 封面 ===== -->
+  <header class="hero">
+    <div class="hero-eyebrow">PROJECT INITIATION · 立项报告</div>
+    <h1 class="hero-title">{{项目名}}：<em>{{一句话说清要拿什么换什么}}</em></h1>
+    <p class="hero-sub">{{副标题：从「现状」到「目标」，一两句话}}</p>
+    <div class="hero-meta">
+      <span>Owner <b>{{姓名 / 角色}}</b></span>
+      <span>日期 <b>{{YYYY-MM-DD}}</b></span>
+      <span>类型 <b>{{0→1 新项目 / 1→N 阶段规划}}</b></span>
+      <span>拍板人 <b>{{谁}}</b></span>
+      <span>状态 <b>待拍板</b></span>
+    </div>
+  </header>
+
+  <!-- ===== 00 一页纸结论 ===== -->
+  <section id="s00">
+    <div class="sec-label">00 · ONE PAGE</div>
+    <h2 class="sec-title">一页纸结论</h2>
+
+    <!-- 组件：一页纸结论卡 -->
+    <div class="onepage" style="margin-top:20px">
+      <div class="op-q">决策问题：<b>{{要老板决定什么，一句话}}</b>　·　批到：<b>{{想法 → POC}}</b>　·　范围：<b>{{用户、渠道、能力}}</b></div>
+      <div class="op-verdict">
+        <!-- 做：默认；不做：class="op-badge no"；有条件做（先验证）：class="op-badge cond"；搁置 / 暂不出结论：class="op-badge park" -->
+        <span class="op-badge cond">{{有条件做}}</span>
+        <div class="op-text">{{一句话说清范围、时长、方式，如「批准一个 X 范围、Y 周的试点，先批到离线评测为止」}}</div>
+      </div>
+      <div class="op-logic">{{核心指标}} ＝ {{因子 A}} × {{因子 B}}</div>
+      <div class="op-grid">
+        <div class="op-cell"><div class="op-k">投入</div><div class="op-v">{{人 × 周；钱按阶段批，先批第一阶段 X}}</div></div>
+        <div class="op-cell"><div class="op-k">怎么算成</div><div class="op-v">{{2 到 3 个首期验收指标及门槛}}</div></div>
+        <div class="op-cell"><div class="op-k">什么情况下停</div><div class="op-v">{{1 到 3 条可观测的停止条件}}</div></div>
+      </div>
+      <div class="op-ask">
+        <div class="op-k">需要您拍板的事</div>
+        <ol>
+          <li>{{拍板事项一}}</li>
+          <li>{{拍板事项二}}</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- 组件：问题 → 行动（每个问题一行，一一对应） -->
+    <h3 class="sub">我们看到的问题 → 我们要做的事</h3>
+    <div class="pa">
+      <div class="pa-row">
+        <div class="pa-p">{{问题一}}<small>{{一句话证据}} <span class="tag t-data">行为数据</span></small></div>
+        <div class="pa-arrow">→</div>
+        <div class="pa-a">{{对应行动 / 专题}}<small>{{怎么做，一句话}}</small></div>
+        <div class="pa-pri"><span class="pri p0">P0</span></div>
+      </div>
+      <div class="pa-row">
+        <div class="pa-p">{{问题二}}<small>{{一句话证据}} <span class="tag t-user">用户原话</span></small></div>
+        <div class="pa-arrow">→</div>
+        <div class="pa-a">{{对应行动 / 专题}}<small>{{怎么做，一句话}}</small></div>
+        <div class="pa-pri"><span class="pri p1">P1</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 01 背景与问题 ===== -->
+  <section id="s01">
+    <div class="sec-label">01 · BACKGROUND</div>
+    <h2 class="sec-title">背景与问题</h2>
+    <p class="sec-lead">{{结论段：为什么是现在做，问题是什么}}</p>
+
+    <h3 class="sub">为什么是现在</h3>
+    <p class="txt">{{外部变化、内部节点、窗口期}}</p>
+
+    <!-- 组件：问题定义卡 -->
+    <h3 class="sub">问题定义</h3>
+    <div class="define">
+      <div class="define-q">{{一句话问题定义，不出现功能名或技术名}}</div>
+      <div class="define-grid">
+        <div><i>谁</i>{{}}</div>
+        <div><i>什么场景</i>{{}}</div>
+        <div><i>卡在哪</i>{{}}</div>
+        <div><i>现在怎么凑合</i>{{}}</div>
+        <div><i>代价</i>{{}}</div>
+      </div>
+    </div>
+
+    <!-- 组件：业务公式 + 漏斗（1→N；0→1 可删） -->
+    <h3 class="sub">业务公式与漏斗诊断 <span class="opt">1→N</span></h3>
+    <div class="formula">{{核心指标}} ＝ {{因子 A}} × {{因子 B}}</div>
+    <!-- 每一级 f-bar 的 width 按人数占比填写 -->
+    <div class="funnel">
+      <div class="f-step"><div class="f-label">{{阶段一}}</div><div class="f-bar" style="width:100%">{{人数}}</div></div>
+      <div class="f-step"><div></div><div class="f-drop">↓ 流失 {{X%}}：{{原因}}</div></div>
+      <div class="f-step"><div class="f-label">{{阶段二}}</div><div class="f-bar" style="width:62%">{{人数}}</div></div>
+      <div class="f-step"><div></div><div class="f-drop crit">↓ 流失 {{X%}}：{{最关键的断点和原因}}</div></div>
+      <div class="f-step"><div class="f-label">{{阶段三}}</div><div class="f-bar" style="width:24%">{{人数}}</div></div>
+    </div>
+    <p class="src-line">数据来源：{{埋点 / 报表名，时间范围，口径}}</p>
+  </section>
+
+  <!-- ===== 02 用户与场景 ===== -->
+  <section id="s02">
+    <div class="sec-label">02 · USERS</div>
+    <h2 class="sec-title">用户与场景</h2>
+    <p class="sec-lead">{{结论段：核心用户是谁，有多疼，证据强不强}}</p>
+
+    <!-- 组件：用户卡（一类用户一张） -->
+    <div class="grid-3" style="margin-top:20px">
+      <div class="pcard">
+        <div class="pc-who">{{用户群 A}}</div>
+        <div class="pc-tag">{{规模 / 占比}} <span class="tag t-data">行为数据</span></div>
+        <div class="pc-row"><i>他在乎什么</i>{{}}</div>
+        <div class="pc-row"><i>因为什么卡住</i>{{}}</div>
+        <div class="pc-row"><i>今天为什么走（1→N）</i>{{}}</div>
+      </div>
+      <div class="pcard" style="border-top-color:var(--teal)">
+        <div class="pc-who">{{用户群 B}}</div>
+        <div class="pc-tag">{{规模 / 占比}}</div>
+        <div class="pc-row"><i>他在乎什么</i>{{}}</div>
+        <div class="pc-row"><i>因为什么卡住</i>{{}}</div>
+        <div class="pc-row"><i>今天为什么走（1→N）</i>{{}}</div>
+      </div>
+      <div class="pcard" style="border-top-color:var(--orange)">
+        <div class="pc-who">{{用户群 C}}</div>
+        <div class="pc-tag">{{规模 / 占比}}</div>
+        <div class="pc-row"><i>他在乎什么</i>{{}}</div>
+        <div class="pc-row"><i>因为什么卡住</i>{{}}</div>
+        <div class="pc-row"><i>今天为什么走（1→N）</i>{{}}</div>
+      </div>
+    </div>
+
+    <h3 class="sub">最有说服力的用户原话</h3>
+    <div class="quote">「{{原话}}」<cite>—— {{用户类型，时间}} <span class="tag t-user">用户原话</span></cite></div>
+
+    <div class="note"><b>说的和做的：</b>{{冲突点及判断，信做的}}</div>
+
+    <!-- 证据强度：充分 用 var(--teal)；有信号待验证 用 var(--orange)；缺证据 用 var(--red) -->
+    <div class="strength"><span class="dot" style="background:var(--orange)"></span>证据强度：{{有信号待验证}}（{{说明}}）</div>
+  </section>
+
+  <!-- ===== 03 市场与竞品 ===== -->
+  <section id="s03">
+    <div class="sec-label">03 · MARKET</div>
+    <h2 class="sec-title">市场与竞品</h2>
+    <p class="sec-lead">{{结论段：机会在哪，凭什么是我们}}</p>
+
+    <h3 class="sub">四类竞品</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>类型</th><th>代表</th><th>它怎么满足这个需求</th><th>短板</th></tr></thead>
+      <tbody>
+        <tr><td><b>直接竞品</b></td><td>{{}}</td><td>{{}}</td><td>{{}}</td></tr>
+        <tr><td><b>间接竞品</b></td><td>{{}}</td><td>{{}}</td><td>{{}}</td></tr>
+        <tr><td><b>替代品</b></td><td>{{}}</td><td>{{}}</td><td>{{}}</td></tr>
+        <tr><td><b>潜在竞品</b></td><td>{{}}</td><td>{{}}</td><td>{{}}</td></tr>
+      </tbody>
+    </table></div>
+
+    <!-- 组件：竞品对比表。「我们」列加 class="us"；最优用 good-t，最差用 bad-t -->
+    <h3 class="sub">关键对比</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>维度</th><th>我们</th><th>{{竞品 A}}</th><th>{{竞品 B}}</th></tr></thead>
+      <tbody>
+        <tr><td><b>{{维度一}}</b></td><td class="us">{{}}</td><td class="good-t">{{}}</td><td>{{}}</td></tr>
+        <tr><td><b>{{维度二}}</b></td><td class="us">{{}}</td><td>{{}}</td><td class="bad-t">{{}}</td></tr>
+      </tbody>
+    </table></div>
+    <p class="src-line">来源：{{竞品官网 / 应用商店 / 实测，获取日期}} <span class="tag t-pub">公开资料</span> <span class="tag t-test">实测</span></p>
+
+    <!-- 组件：差异化公式 -->
+    <h3 class="sub">差异化</h3>
+    <div class="diff">
+      <div class="dx"><i>盯谁 · X</i>{{用户}}</div>
+      <div class="dy"><i>他最在乎 · Y</i>{{在乎的事}}</div>
+      <div class="dz"><i>竞品做不了，因为 · Z</i>{{原因}}</div>
+    </div>
+
+    <div class="warn"><b>反方论证：</b>{{为什么对手可能赢、我们可能输}}<br><b>我们的应对：</b>{{}}</div>
+  </section>
+
+  <!-- ===== 04 目标与成功指标 ===== -->
+  <section id="s04">
+    <div class="sec-label">04 · GOALS</div>
+    <h2 class="sec-title">目标与成功指标</h2>
+    <p class="sec-lead">{{结论段：做完之后用户体验是什么样，用什么数说明做成了}}</p>
+
+    <!-- 组件：旅程对比。有基线的用 base-real「现状 → 目标」；没基线的用 base-tbd「建立基线」 -->
+    <h3 class="sub">用户完整用一次：今天 vs 目标</h3>
+    <div class="jn-head"><div>步骤</div><div class="h-now">今天的样子</div><div class="h-tgt">要做到的样子</div><div class="h-mx">怎么衡量</div></div>
+    <div class="jn-row">
+      <div class="jn-step"><span class="jn-num">1</span>{{步骤}}</div>
+      <div class="jn-now">{{}}</div>
+      <div class="jn-tgt">{{}}</div>
+      <div class="jn-mx">{{指标名}}<b>{{X}} → {{Y}}</b><span class="base-real">有基线 · {{依据}}</span></div>
+    </div>
+    <div class="jn-row">
+      <div class="jn-step"><span class="jn-num">2</span>{{步骤}}</div>
+      <div class="jn-now">{{}}</div>
+      <div class="jn-tgt">{{}}</div>
+      <div class="jn-mx">{{指标名}}<b>无埋点 → 建立基线</b><span class="base-tbd">待建基线</span></div>
+    </div>
+    <div class="note"><b>指标口径：</b>「现状 → 目标」类来自 {{实测 / 数据}}，目标对齐 {{依据}}；「建立基线」类因功能未上线或缺埋点，本期只定方向，随开发补数后再定目标。</div>
+
+    <!-- 组件：指标卡（结果指标，最多 4 个） -->
+    <h3 class="sub">结果指标</h3>
+    <div class="metrics">
+      <div class="metric"><div class="m-k">{{结果指标一}}</div><div class="m-v good">{{X → Y}}</div><div class="m-n">由 {{过程指标}} 推动</div></div>
+      <div class="metric"><div class="m-k">{{结果指标二}}</div><div class="m-v">{{X → Y}}</div><div class="m-n">由 {{过程指标}} 推动</div></div>
+      <div class="metric"><div class="m-k">{{结果指标三}}</div><div class="m-v bad">{{待定}}</div><div class="m-n">{{暂不给数字的原因，何时给}}</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 05 方案与第一版范围 ===== -->
+  <section id="s05">
+    <div class="sec-label">05 · SCOPE</div>
+    <h2 class="sec-title">方案与第一版范围</h2>
+    <p class="sec-lead">{{结论段：先做什么，第一版验证什么}}</p>
+
+    <h3 class="sub">取舍原则 <span class="opt">1→N</span></h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>原则</th><th>怎么判断</th></tr></thead>
+      <tbody>
+        <tr><td><b>{{原则一}}</b></td><td>{{}}</td></tr>
+        <tr><td><b>{{原则二}}</b></td><td>{{}}</td></tr>
+      </tbody>
+    </table></div>
+
+    <!-- 组件：要验证的假设 -->
+    <h3 class="sub">第一版要验证的假设</h3>
+    <div class="hypo"><span class="k">HYPOTHESIS</span>{{某类用户}}在{{某场景}}下，会{{某行为}}，达到{{某程度}}。</div>
+    <p class="txt"><b>验证通过标准：</b>{{}}</p>
+
+    <!-- 组件：范围三栏 -->
+    <h3 class="sub">范围</h3>
+    <div class="scope">
+      <div class="scope-col must"><div class="scope-h">必须做</div><ul>
+        <li>{{功能 / 能力}}<small>连回痛点：{{}}</small></li>
+        <li>{{功能 / 能力}}<small>连回痛点：{{}}</small></li>
+      </ul></div>
+      <div class="scope-col not"><div class="scope-h">明确不做</div><ul>
+        <li>{{}}<small>理由：{{}}</small></li>
+        <li>{{}}<small>理由：{{}}</small></li>
+      </ul></div>
+      <div class="scope-col later"><div class="scope-h">以后再说</div><ul>
+        <li>{{}}<small>条件：{{}}</small></li>
+      </ul></div>
+    </div>
+
+    <h3 class="sub">专题拆解 <span class="opt">1→N</span></h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>专题</th><th>解决哪个问题</th><th>主要需求</th><th>承接团队</th><th>瓶颈负载</th></tr></thead>
+      <tbody>
+        <tr><td><b>{{}}</b></td><td>{{}}</td><td>{{}}</td><td>{{}}</td><td>{{}}</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ===== 06 投入与计划 ===== -->
+  <section id="s06">
+    <div class="sec-label">06 · PLAN</div>
+    <h2 class="sec-title">投入与计划</h2>
+    <p class="sec-lead">{{结论段：要多少人、多少钱、多久，分几段批}}</p>
+
+    <!-- 组件：决策矩阵。data-s 填 1 到 5 分 -->
+    <h3 class="sub">决策三问</h3>
+    <div class="matrix">
+      <div class="mx-row">
+        <div class="mx-q">用户买不买？<small>市场有蛋糕吗</small></div>
+        <div class="score" data-s="4"><span></span><span></span><span></span><span></span><span></span><em>4</em></div>
+        <div class="mx-why">{{理由一句}} <span class="tag t-user">用户原话</span></div>
+      </div>
+      <div class="mx-row">
+        <div class="mx-q">公司赚不赚？<small>赚钱或换到公司要的东西</small></div>
+        <div class="score" data-s="3"><span></span><span></span><span></span><span></span><span></span><em>3</em></div>
+        <div class="mx-why">{{理由一句}} <span class="tag t-est">测算</span></div>
+      </div>
+      <div class="mx-row">
+        <div class="mx-q">开发难不难？<small>我们能做吗</small></div>
+        <div class="score" data-s="4"><span></span><span></span><span></span><span></span><span></span><em>4</em></div>
+        <div class="mx-why">{{理由一句}} <span class="tag t-test">实测</span></div>
+      </div>
+    </div>
+    <p class="txt">{{一段话讲清取舍：选了什么、为什么、代价是什么}}</p>
+
+    <h3 class="sub">团队与资源</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>角色</th><th>人数</th><th>投入周期</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td><b>{{}}</b></td><td class="num">{{}}</td><td>{{}}</td><td>{{}}</td></tr>
+      </tbody>
+    </table></div>
+    <p class="txt"><b>资金：</b>{{按阶段，金额或口径；未定的写「待 X 后冻结」}}</p>
+
+    <!-- 组件：闸门时间线（一个阶段一块） -->
+    <h3 class="sub">分阶段与闸门</h3>
+    <div class="gates">
+      <div class="gate">
+        <div class="gate-h"><span class="gate-name">阶段 A · {{名称}}</span><span class="gate-time">{{时间}}</span></div>
+        <div class="gate-body">
+          <div><i>先验证什么</i>{{}}</div>
+          <div><i>主要产出</i>{{}}</div>
+          <div><i>通过标准</i>{{}}</div>
+        </div>
+        <div class="gate-fail">不过闸：{{停止 / 降级 / 转向}}</div>
+      </div>
+      <div class="gate">
+        <div class="gate-h"><span class="gate-name">阶段 B · {{名称}}</span><span class="gate-time">{{时间}}</span></div>
+        <div class="gate-body">
+          <div><i>先验证什么</i>{{}}</div>
+          <div><i>主要产出</i>{{}}</div>
+          <div><i>通过标准</i>{{}}</div>
+        </div>
+        <div class="gate-fail">不过闸：{{}}</div>
+      </div>
+    </div>
+
+    <h3 class="sub">版本节奏 <span class="opt">1→N</span></h3>
+    <p class="txt"><b>外部锚点：</b>{{日期 + 事件}}　<b>最紧的一版：</b>{{哪版，为什么}}</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>版本</th><th>时间窗口</th><th>重点</th><th>为什么放这一版</th></tr></thead>
+      <tbody>
+        <tr><td><b>{{}}</b></td><td>{{}}</td><td>{{}}</td><td>{{}}</td></tr>
+      </tbody>
+    </table></div>
+
+    <!-- 组件：砍需求分层 -->
+    <h3 class="sub">资源不足时怎么砍 <span class="opt">1→N</span></h3>
+    <div class="tiers">
+      <div class="tier"><span class="tier-k l0">L0 绝不砍</span><div>{{内容}}</div><div>{{理由}}</div></div>
+      <div class="tier"><span class="tier-k l1">L1 优先保</span><div>{{内容}}</div><div>{{理由}}</div></div>
+      <div class="tier"><span class="tier-k l2">L2 可后移</span><div>{{内容}}</div><div>{{理由}}</div></div>
+      <div class="tier"><span class="tier-k l3">L3 先砍</span><div>{{内容}}</div><div>{{理由}}</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 07 AI 方案四问 ===== -->
+  <section id="s07">
+    <div class="sec-label">07 · AI</div>
+    <h2 class="sec-title">AI 方案四问</h2>
+    <p class="sec-lead">{{结论段：AI 在这件事里做什么、不做什么、做到多好、出错谁兜}}</p>
+
+    <!-- 组件：AI 四问卡。答不上来的那一问加 class="pending" -->
+    <div class="ai4" style="margin-top:20px">
+      <div class="ai-card">
+        <div class="ai-k">Q1 · 该不该用 AI</div>
+        <div class="ai-t">{{一句话回答}}</div>
+        <p>重复性高：{{判断 + 依据}}<br>标准化程度高：{{}}<br>人力瓶颈明显：{{}}<br>非 AI 方案为什么不够：{{}}<br>模型变强后我们的位置：{{}}</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-k">Q2 · 做到多好才算行</div>
+        <div class="ai-t">{{一句话回答}}</div>
+        <p>{{指标}}：门槛 {{}}，依据 {{}}，评测方式 {{}}<br>评测集：{{来源、规模、标注方式}}</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-k">Q3 · 出了错，谁兜</div>
+        <div class="ai-t">{{一句话回答}}</div>
+        <p>AI 负责：{{}}<br>规则负责：{{}}<br>人负责：{{}}<br>AI 不能决定的事：{{}}<br>AI 没把握时：{{转人工 / 用户确认 / 不出结论}}</p>
+      </div>
+      <div class="ai-card pending">
+        <div class="ai-k">Q4 · 数据和成本 · 待验证</div>
+        <div class="ai-t">{{一句话回答}}</div>
+        <p>数据来源与负责人：{{}}<br>权限与合规审批：{{}}<br>单次成本：{{}} <span class="tag t-est">测算</span><br>规模成本：{{}}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 08 风险与停止条件 ===== -->
+  <section id="s08">
+    <div class="sec-label">08 · RISK</div>
+    <h2 class="sec-title">风险与停止条件</h2>
+    <p class="sec-lead">{{结论段：最大的风险是什么，怎么控}}</p>
+
+    <h3 class="sub">事前验尸</h3>
+    <p>假设一年后这个项目失败了，最可能的原因：</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>类型</th><th>失败原因</th><th>怎么处理</th><th>负责人 / 时间</th></tr></thead>
+      <tbody>
+        <tr><td><span class="lv lv-h">老虎 · 立项前必须解决</span></td><td>{{}}</td><td>{{}}</td><td>{{}}</td></tr>
+        <tr><td><span class="lv lv-m">老虎 · 试点期内解决</span></td><td>{{}}</td><td>{{}}</td><td>{{}}</td></tr>
+        <tr><td><span class="lv lv-l">纸老虎</span></td><td>{{}}</td><td>{{为什么不是真风险}}</td><td>{{}}</td></tr>
+        <tr><td><span class="lv lv-m">大象</span></td><td>{{}}</td><td>{{怎么调查}}</td><td>{{}}</td></tr>
+      </tbody>
+    </table></div>
+    <p><b>一票否决项：</b>隐私 {{通过 / 未通过 / 待验证}}　合规 {{}}　数据权限 {{}}　安全 {{}}　资金 {{}}</p>
+
+    <h3 class="sub">风险表</h3>
+    <!-- 组件：风险表。等级用 lv-h / lv-m / lv-l -->
+    <div class="tbl-wrap" style="margin-top:20px"><table>
+      <thead><tr><th>风险</th><th>可能性</th><th>影响</th><th>应对 / 降级方案</th><th>负责人</th></tr></thead>
+      <tbody>
+        <tr><td><b>{{}}</b></td><td><span class="lv lv-h">高</span></td><td>{{}}</td><td>{{}}</td><td>{{}}</td></tr>
+        <tr><td><b>{{}}</b></td><td><span class="lv lv-m">中</span></td><td>{{}}</td><td>{{}}</td><td>{{}}</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="sub">停止条件</h3>
+    <div class="stops">
+      <div class="stop"><div>{{可观测条件}}</div><span class="stop-act">→ {{停止 / 转向}}</span></div>
+      <div class="stop"><div>{{可观测条件}}</div><span class="stop-act">→ {{停止 / 转向}}</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 09 决策待办与数据缺口 ===== -->
+  <section id="s09">
+    <div class="sec-label">09 · TODO</div>
+    <h2 class="sec-title">决策待办与数据缺口</h2>
+
+    <h3 class="sub">决策待办</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>时间</th><th>事项</th><th>内容</th><th>责任人</th></tr></thead>
+      <tbody>
+        <tr><td class="num">{{MM-DD}}</td><td><b>{{}}</b></td><td>{{}}</td><td>{{}}</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="sub">数据缺口</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>缺什么</th><th>影响哪个判断</th><th>怎么补</th><th>何时</th></tr></thead>
+      <tbody>
+        <tr><td><b>{{}}</b></td><td>{{}}</td><td>{{}}</td><td>{{}}</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="sub">决策记录与预测</h3>
+    <p>上线复盘时拿这张表对照实际结果。</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>项</th><th>内容</th></tr></thead>
+      <tbody>
+        <tr><td><b>结论</b></td><td>{{四选一，批到哪一步}}</td></tr>
+        <tr><td><b>最强的反对意见</b></td><td>{{以及为什么仍然这么决定}}</td></tr>
+        <tr><td><b>机会成本</b></td><td>{{做这个就不能做什么}}</td></tr>
+        <tr><td><b>预测</b></td><td>{{上线后多久、看哪个信号、预计到什么程度}}</td></tr>
+        <tr><td><b>重新评估的触发条件</b></td><td>{{}}</td></tr>
+        <tr><td><b>复盘日期</b></td><td class="num">{{YYYY-MM-DD}}</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ===== 附录（默认折叠） ===== -->
+  <section id="sap">
+    <div class="sec-label">APPENDIX</div>
+    <h2 class="sec-title">附录</h2>
+    <div style="margin-top:20px">
+      <details class="ap"><summary>A · 需求池</summary><div class="ap-body">{{引用 03-需求池.md 的精简版}}</div></details>
+      <details class="ap"><summary>B · 本期未纳入的需求与放弃的方向</summary><div class="ap-body">{{每条附理由}}</div></details>
+      <details class="ap"><summary>C · 竞品详细对比</summary><div class="ap-body">{{引用 04-竞品分析.md}}</div></details>
+      <details class="ap"><summary>D · 调研记录摘要</summary><div class="ap-body">{{引用 02-用户画像与调研结论.md}}</div></details>
+      <details class="ap"><summary>E · 证据台账</summary><div class="ap-body">{{引用 00-项目档案.md 的证据台账}}</div></details>
+      <details class="ap"><summary>F · 参考来源</summary><div class="ap-body"><ol><li>{{标题}} · {{链接}} · {{获取日期}}</li></ol></div></details>
+    </div>
+
+    <!-- 组件：证据标签图例（保留） -->
+    <div class="legend">
+      <span><span class="tag t-user">用户原话</span><span class="tag t-data">行为数据</span><span class="tag t-test">实测</span> 可作为立项依据</span>
+      <span><span class="tag t-pub">公开资料</span> 可作依据，注明时间</span>
+      <span><span class="tag t-biz">业务方表达</span><span class="tag t-est">测算</span> 只能当线索或估算</span>
+      <span><span class="tag t-sim">模拟</span><span class="tag t-ai">AI推断</span> 不能作为依据</span>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// 目录高亮 + 顶部阅读进度。无外部依赖，脚本失效时页面照常可读。
+(function () {
+  var bar = document.getElementById('progressBar');
+  var links = Array.prototype.slice.call(document.querySelectorAll('#nav a'));
+  var secs = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    if (bar) bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+    var cur = 0;
+    secs.forEach(function (s, i) { if (s && s.getBoundingClientRect().top < 140) cur = i; });
+    links.forEach(function (a, i) { a.classList.toggle('active', i === cur); });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

@@ -1,12 +1,12 @@
 ---
 name: prd
-description: AI 产品 PRD 搭档（AIPM 工坊第 02 阶段）。以立项报告为输入，按「对齐输入→写清价值→拆功能和故事→划 AI 能力边界→定指标和上线条件→成稿自检」六站推进，默认写 1～3 页的精简版，每个 P0 功能都有 Given/When/Then 验收标准，AI 功能必须写清能力边界、失败兜底和评测样例。用户说「写 PRD」「写需求文档」「把立项变成 PRD」「写功能规格」「这个功能怎么写需求」或 /prd 时使用。只审查已有 PRD 时用 prd-review。
+description: AI 产品 PRD 搭档（拾阶第 02 阶段）。以立项报告为输入，按「对齐输入→写清价值→拆功能和故事→划 AI 能力边界→定指标和上线条件→成稿自检」六站推进，默认写 1～3 页的精简版，每个 P0 功能都有 Given/When/Then 验收标准，AI 功能必须写清能力边界、失败兜底和评测样例。用户说「写 PRD」「写需求文档」「把立项变成 PRD」「写功能规格」「这个功能怎么写需求」或 /prd 时使用。只审查已有 PRD 时用 prd-review。
 whenToUse: 立项结论是「做」之后写 PRD；或者用户直接拿着一个功能想法要一份能评审的需求文档。
 ---
 
 # AI 产品 PRD
 
-> 融合改编自 [phuryn/pm-skills](https://github.com/phuryn/pm-skills) 的 `create-prd`（MIT，Paweł Huryn）和 [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) 的 `write-spec`（Apache-2.0，Anthropic）。改动：中文化；改为分站推进；加入 AI 能力边界、评测样例、上线与停止条件；接入 AIPM 工坊的进度文件。相对原文有大幅修改。
+> 融合改编自 [phuryn/pm-skills](https://github.com/phuryn/pm-skills) 的 `create-prd`（MIT，Paweł Huryn）和 [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) 的 `write-spec`（Apache-2.0，Anthropic）。改动：中文化；改为分站推进；加入 AI 能力边界、评测样例、上线与停止条件；接入拾阶的进度文件。相对原文有大幅修改。
 
 ## 两句总纲
 
@@ -24,7 +24,7 @@ whenToUse: 立项结论是「做」之后写 PRD；或者用户直接拿着一�
 
 ## 开场：盘点（每次调用都先做）
 
-1. **定位项目。** 从 AIPM 工坊总控进来时，项目名和项目根目录已知。否则问项目名，在当前工作区找 `<项目名>/aipm.json`；找不到就当作不在工坊里用（见文末「不在工坊里」）。下文「PRD 目录」指 `<项目根目录>/02-PRD/`。
+1. **定位项目。** 从拾阶总控进来时，项目名和项目根目录已知。否则问项目名，在当前工作区找 `<项目名>/aipm.json`；找不到就当作不在拾阶里用（见文末「不在拾阶里」）。下文「PRD 目录」指 `<项目根目录>/02-PRD/`。
 2. **找存档。** `02-PRD/00-PRD档案.md` 存在就读它，复述上次走到哪一站、还缺什么，从断点继续；不存在就按 [templates/00-PRD档案.md](templates/00-PRD档案.md) 建一个。
 3. **读输入。** 依次读 `01-立项/立项报告.md`、`01-立项/05-MVP范围表.md`、`01-立项/02-用户画像与调研结论.md`、`01-立项/04-竞品分析.md`（有哪个读哪个）。立项报告里写的「第一版做什么、不做什么、怎么算验证通过」是 PRD 的边界，不能悄悄扩大。
 4. **没立项就写 PRD：** 可以写，但先说清风险（范围和优先级没有依据），在档案里记一句「未经立项」，并在 PRD 的「假设与待定问题」开头写明。
@@ -140,7 +140,7 @@ whenToUse: 立项结论是「做」之后写 PRD；或者用户直接拿着一�
 6. 把【测算】【业务方表达】【模拟】写成事实。
 7. 偷偷扩大立项定下的范围。
 
-## 进度文件（AIPM 工坊约定）
+## 进度文件（拾阶约定）
 
 项目根目录的 `aipm.json` 由右侧「项目」面板读取，格式见 `aipm-hub` 的 references/aipm-json.md。本 skill 只改 `id` 为 `prd` 的那一项：第一次运行时把它从 `unavailable` 或 `not_started` 改为 `in_progress`，并写入六站：
 
@@ -166,6 +166,6 @@ whenToUse: 立项结论是「做」之后写 PRD；或者用户直接拿着一�
 - **不写技术方案。** 只在必要时写技术约束。
 - **审查别人的 PRD** 用 `prd-review`；只想快速检查时，对照本文「自检清单」和「红线」列出缺口，先列缺口，再列可以删的部分。
 
-## 不在工坊里
+## 不在拾阶里
 
 当前工作区没有 `aipm.json` 时，跳过档案和进度文件，按同样六站推进，成稿存为当前目录下的 `PRD-<产品名>.md`。
