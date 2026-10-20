@@ -221,7 +221,7 @@ cd aipm-skill-pack
 | `system-prompt-design` | [kangarooking/system-prompt-skills](https://github.com/kangarooking/system-prompt-skills) | MIT | kangarooking |
 | `eval-*`（7 个） | [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) | MIT | Hamel Husain |
 
-`aipm-hub` 和 `project-initiation` 是我自己写的。立项的两份参考资料（假设地图与验证实验、事前验尸）借鉴了 [phuryn/pm-skills](https://github.com/phuryn/pm-skills) 和 [caalvinz/opportunity-discovery-skill](https://github.com/caalvinz/opportunity-discovery-skill)（都是 MIT）的方法，文字是改写的，来源写在各文件开头。
+`aipm-hub` 和 `project-initiation` 是我自己写的。立项 v2 借鉴了 [hope138/enterprise-ai-project-assessor](https://github.com/hope138/enterprise-ai-project-assessor)、[caalvinz/opportunity-discovery-skill](https://github.com/caalvinz/opportunity-discovery-skill)、[phuryn/pm-skills](https://github.com/phuryn/pm-skills)（都是 MIT）的方法，文字是改写的，来源写在 `SKILL.md` 的「版本说明」和两份参考资料的开头。
 
 改编的 skill 目录里都附有上游的 LICENSE（`prd-review` 另附原仓库的 NOTICE），每个 `SKILL.md` 开头写明了改编来源和改动。本仓库自己写的部分（两个流程 skill、README、`install.sh`、`prd` 里新增的内容和模板）用 MIT 协议，见 [LICENSE](LICENSE)。完整的第三方声明见 [NOTICE.md](NOTICE.md)。
 
