@@ -1,0 +1,217 @@
+# AIPM Skill Pack
+
+**AI 产品经理用的 17 个 Agent Skill，从用户调研一路覆盖到上线复盘。** 全部中文化，按「立项 → PRD → 原型 → AI 方案 → 评测 → 复盘」六个阶段组织。它们是从 7 个开源项目里挑出来改编的，任何认 `SKILL.md` 格式的 Agent 都能用（DeepSeek Harness、Claude Code、Codex、OpenClaw 等）。
+
+这套 skill 是 [AIPM 工坊](https://github.com/ZeroOnehub/aipm-workbench)（我基于 DeepSeek Harness 做的 AI 产品经理工作台）第 02～06 阶段的工具层，单独拿出来也能用。
+
+---
+
+## 一览
+
+| 阶段 | skill | 一句话 |
+|---|---|---|
+| 01 立项 · 调研 | [`interview-script`](#interview-script用户访谈提纲) | 写不带诱导的用户访谈提纲 |
+| | [`research-synthesis`](#research-synthesis调研综合) | 把访谈、问卷、反馈综合成带证据的洞察 |
+| 02 PRD | [`prd`](#prd写-ai-产品的-prd) | 分六站写 AI 产品 PRD，必须写清 AI 能力边界和评测样例 |
+| | [`prd-review`](#prd-reviewprd-质量审查) | 按 14 个维度给 PRD 挑刺 |
+| 03 原型交互 | [`html-wireframe`](#html-wireframe低保真线框图) | 低保真线框图，先对齐结构 |
+| | [`html-prototype`](#html-prototype高保真原型) | 高保真、能点的单文件原型 |
+| 04 AI 方案设计 | [`system-prompt-design`](#system-prompt-design系统提示词设计) | 用 15 个设计模式写系统提示词 |
+| | [`harness-patterns`](#harness-patternsagent-harness-设计模式) | Agent 的记忆、权限、上下文、多 Agent 怎么设计 |
+| 05 评测 | [`eval-synthetic-data`](#eval-synthetic-data生成测试数据) | 按维度组合造测试数据 |
+| | [`eval-error-analysis`](#eval-error-analysis错误分析) | 读轨迹、归类失败，评测的第一步 |
+| | [`eval-judge-prompt`](#eval-judge-prompt写大模型评委) | 写只判通过 / 失败的大模型评委 |
+| | [`eval-validate-judge`](#eval-validate-judge校准评委) | 用 TPR / TNR 校准评委，修正线上通过率 |
+| | [`eval-rag`](#eval-rag评测-rag) | 检索和生成分开评，调分块 |
+| | [`eval-review-ui`](#eval-review-ui做标注工具) | 做一个人工标注轨迹的网页 |
+| | [`eval-audit`](#eval-audit评测体检) | 体检一整套评测体系 |
+| 06 上线复盘 | [`metrics-review`](#metrics-review指标复盘) | 北极星 → L1 → L2，做指标计分卡 |
+| | [`retro`](#retro复盘) | 复盘会，带上线复盘专用格式 |
+
+---
+
+## 安装
+
+### AIPM 工坊 / DeepSeek Harness
+
+工坊会扫描「当前工作区/.dsh/skills」，所以只要在工作区里建一个指向本仓库 `skills/` 的链接：
+
+```bash
+git clone https://github.com/ZeroOnehub/aipm-skill-pack.git
+cd aipm-skill-pack
+./install.sh --workspace "<你的工坊工作区>"
+```
+
+链接是整个目录，以后 `git pull` 拿到的新 skill 会自动生效，不用重启。
+
+### Claude Code、Codex 等其他 Agent
+
+把每个 skill 链接进对应的 skills 目录（已有同名目录的会跳过，不会覆盖）：
+
+```bash
+./install.sh ~/.claude/skills    # Claude Code
+./install.sh ~/.codex/skills     # Codex
+```
+
+装好后直接用中文说需求就会触发，也可以用 `/<skill 名>` 显式调用。
+
+---
+
+## 每个 skill 干什么、怎么用
+
+> 「试试这样说」里的话可以直接复制使用。在 AIPM 工坊里，产出物会自动放进当前项目对应的阶段目录。
+
+### `interview-script`：用户访谈提纲
+
+- **干什么**：按《The Mom Test》原则写访谈提纲，只问过去的真实行为，不推销，也不问「你会不会用」。提纲分开场、热身、核心探索（JTBD 追问）、收尾四段，另附一张访谈记录表。
+- **什么时候用**：要去访谈用户；立项时缺真实用户证据。
+- **试试这样说**：「我要访谈 5 个做跨境电商的运营，验证『上新文案写得慢』这个痛点，帮我写访谈提纲。」
+- **产出**：`访谈提纲-<主题>.md`
+
+### `research-synthesis`：调研综合
+
+- **干什么**：把访谈记录、问卷、反馈、工单综合成 5～8 条关键发现，每条带原话证据、出现频率、影响和置信度，再给出用户分群、机会点和建议。证据带来源标签，AI 模拟的内容不能当依据。
+- **什么时候用**：访谈做完了，一堆记录不知道说明了什么。
+- **试试这样说**：「这是 6 份访谈记录，帮我做调研综合，按频率和影响排序。」
+- **产出**：`调研综合-<主题>.md`
+
+### `prd`：写 AI 产品的 PRD
+
+- **干什么**：以立项报告为输入，分六站推进：对齐输入 → 写清价值 → 拆功能和故事 → 划 AI 能力边界 → 定指标和上线条件 → 成稿自检。默认写 1～3 页的精简版，每个 P0 功能都有 Given/When/Then 验收标准。AI 功能必须写清「AI 负责什么、不负责什么、错了怎么兜、人在哪接手」，并附至少 5 条评测样例。有关卡和红线，比如全是 P0、没有停止条件，都过不了。
+- **什么时候用**：立项通过后写需求；或者手上有个功能想法，要一份能拿去评审的文档。
+- **试试这样说**：「根据立项报告写 PRD。」/「我想做一个帮运营自动写周报的 AI 功能，帮我写个 PRD。」
+- **产出**：`PRD.md`、`00-PRD档案.md`（在工坊里会同步更新右侧进度面板）
+
+### `prd-review`：PRD 质量审查
+
+- **干什么**：按杨堃《决胜B端》的 14 个维度逐一审查 PRD。每条发现都定位到具体章节，并给出能直接照着改的写法。最后汇总 P0～P3 问题清单、重大风险和 Top 10 改进建议。审 C 端 AI 产品时会跳过 B 端专属的维度。
+- **什么时候用**：评审会前想先找出漏洞。
+- **试试这样说**：「帮我审一下 02-PRD/PRD.md，评审前挑挑刺。」
+- **产出**：`PRD审查报告.md`
+
+### `html-wireframe`：低保真线框图
+
+- **干什么**：用灰阶、方块和真实文案做低保真 HTML，用来检验信息层级和任务流程。布局没定时会并排给出 2～3 个结构方向，各写一句取舍。
+- **什么时候用**：PRD 定了，先对齐「屏幕上放什么、怎么走」，再谈样式。
+- **试试这样说**：「按 PRD 里的主流程画线框图，给我两个导航方案对比。」
+- **产出**：`线框图-<页面>.html`
+
+### `html-prototype`：高保真原型
+
+- **干什么**：做单文件的高保真原型。先定是静态视觉稿还是可交互原型；加载、空状态、出错、成功、禁用、手机端这些状态都要画出来。AI 功能还要画生成中、失败重试、需要人确认、低置信度这几种状态。不依赖任何外部服务，浏览器直接打开就能用。
+- **什么时候用**：要给评审、用户测试或面试演示一个能点的东西。
+- **试试这样说**：「把『生成周报 → 人工确认 → 发送』这条流程做成可交互原型，要有生成失败的状态。」
+- **产出**：`原型-<流程>.html`
+
+### `system-prompt-design`：系统提示词设计
+
+- **干什么**：从主流 AI 产品的系统提示词里归纳出 15 个设计模式，包括身份、人格、工具、安全护栏、记忆、输出格式、注入防御等。按产品形态（聊天助手、Agent、AI 搜索、语音……）选出要用的组合，写一份分层的系统提示词草案，再用 PRD 的评测样例推演一遍。
+- **什么时候用**：要把 PRD 里的「AI 能力边界」落成提示词；或者要评审一份现成的提示词。
+- **试试这样说**：「这是个企业知识库问答助手，按 PRD 帮我设计系统提示词。」
+- **产出**：`系统提示词-v1.md`、`系统提示词设计说明.md`
+
+### `harness-patterns`：Agent Harness 设计模式
+
+- **干什么**：从 Claude Code 源码里提炼的 Agent 运行时设计模式，覆盖记忆、技能、工具与权限、上下文工程、多 Agent、Hook、启动序列，每个模式都讲清解决什么问题、怎么做、有什么取舍和坑。我加了一节「产品经理怎么用」，讲任何一个环节都按「优势 → 劣势 → 冲突点 → 要不要加 → 兜底方案」来讲。
+- **什么时候用**：设计 Agent 类产品；面试或分享时要讲清某个 Harness 环节。
+- **试试这样说**：「我的个人助理 Agent 要不要做长期记忆？按五段式帮我分析。」
+- **产出**：`Agent方案.md`
+
+### `eval-synthetic-data`：生成测试数据
+
+- **干什么**：先按「最可能出错的地方」定 3 个维度，和你一起确认 20 个维度组合，再让大模型扩充组合；改写成自然的用户问题要单独做一步（避免措辞重复），最后过滤掉不真实的。
+- **什么时候用**：要开始评测，但真实用户数据太少。
+- **试试这样说**：「我的产品是 AI 写周报，帮我设计评测维度并生成 100 条测试输入。」
+- **产出**：`合成数据-维度与组合.md`、`测试输入.csv`
+
+### `eval-error-analysis`：错误分析
+
+- **干什么**：带你逐条读约 100 条运行轨迹，判通过或失败，只记第一个出错的地方。把失败归成 5～10 个具体、能指导行动的类别，算出各类失败率。然后决定哪些直接改提示词或补工具就能修，哪些才值得做评估器。
+- **什么时候用**：评测的第一步；换模型、改提示词之后；线上出问题之后。
+- **试试这样说**：「这是 100 条对话记录，带我做错误分析。」
+- **产出**：`错误分析-<日期>.md`、标注表
+
+### `eval-judge-prompt`：写大模型评委
+
+- **干什么**：为一种主观失败（语气、忠实度、相关性）写大模型评委提示词。每个评委只查一件事，结论只有通过 / 失败两种，提示词必须包含任务与标准、通过和失败的定义、带点评的示例、先点评后结论的结构化输出四部分。能用代码检查的，不用评委。
+- **什么时候用**：错误分析找出了需要人判断的失败类别。
+- **试试这样说**：「针对『回答没有基于资料』这类失败，帮我写评委提示词。」
+- **产出**：`评委/评委-<失败类别>.md`
+
+### `eval-validate-judge`：校准评委
+
+- **干什么**：把人工标注数据切成训练 / 开发 / 测试三份。在开发集上反复改评委，直到 TPR、TNR 都超过 90%；在测试集上只跑一次拿最终结果。再用 Rogan-Gladen 公式修正线上通过率，并给出置信区间。附 Python 代码，另外一节教你怎么把结果讲给老板听。
+- **什么时候用**：评委写好了，正式用它的结果做决策之前。
+- **试试这样说**：「这是 100 条人工标注和评委结果，帮我算 TPR / TNR 并修正通过率。」
+- **产出**：`评委校准-<失败类别>.md`
+
+### `eval-rag`：评测 RAG
+
+- **干什么**：先判断问题出在检索还是生成，再分开评。检索部分用人工标注、合成问答和对抗问题建评测集，按场景选 Recall@k、MRR、NDCG@k 等指标，把分块大小当超参数做网格搜索；生成部分单独评忠实度和相关性。
+- **什么时候用**：产品里有知识库问答，效果不好或要优化。
+- **试试这样说**：「我们的知识库问答经常答非所问，帮我设计 RAG 评测方案。」
+- **产出**：`RAG评测-<日期>.md`
+
+### `eval-review-ui`：做标注工具
+
+- **干什么**：做一个人工审阅轨迹的网页：一次显示一条完整轨迹，有通过 / 失败 / 稍后按钮和备注框，支持快捷键翻页、自动保存。数据按原本的形式显示：邮件就像邮件，代码有高亮，JSON 可以折叠。
+- **什么时候用**：要人工标注大量 badcase，表格看得太累。
+- **试试这样说**：「用这份 traces.json 给我做一个标注工具。」
+- **产出**：`标注工具/index.html`
+
+### `eval-audit`：评测体检
+
+- **干什么**：从错误分析、评估器设计、评委校准、人工审核、标注数据、流程维护六个方面检查一套评测体系，按影响排序列出问题和修法。完全没有评测体系时，告诉你从哪开始。
+- **什么时候用**：接手一套评测，或者怀疑评测结果不可信。
+- **试试这样说**：「这是我们现在的评测脚本和评委提示词，帮我体检一下。」
+- **产出**：`评测体检-<日期>.md`
+
+### `metrics-review`：指标复盘
+
+- **干什么**：搭「北极星 → L1 健康指标 → L2 诊断指标」的层级，做计分卡，写亮点、隐患和行动。也覆盖 DAU、留存、转化、激活的口径和 OKR 怎么定。我补了 AI 产品特有的指标：首次可用率、人工接管率、单任务成本、响应延迟、评测通过率。
+- **什么时候用**：上线后看数据；写周报月报；指标突然跌了。
+- **试试这样说**：「这是上线两周的数据，对照 PRD 的目标做一次指标复盘。」
+- **产出**：`指标复盘-<时间段>.md`
+
+### `retro`：复盘
+
+- **干什么**：组织结构化复盘，有开始/停止/继续、4L、帆船图三种通用格式，另外我加了一种「上线复盘」格式：对照 PRD 的目标和立项时写下的预测，复盘 AI 能力边界划得对不对、哪些兜底真的被触发了，最后给出继续、调整还是停止。行动项最多 3 条，每条都有负责人和截止时间。
+- **什么时候用**：迭代结束、功能上线一段时间后、项目收尾。
+- **试试这样说**：「功能上线一个月了，用上线复盘的格式帮我复盘。」
+- **产出**：`复盘-<版本>.md`
+
+---
+
+## 我做了哪些改造
+
+1. **选型**：从 GitHub 上的 PM skill 合集里挑。协议必须允许二次开发（MIT / Apache-2.0）；内容必须讲方法，不能只是模板；和 AI 产品相关的优先。
+2. **中文化**：正文全部翻译或改写成中文，触发描述也改成中文的说法，这样用中文提需求才能命中。示例尽量换成中文场景。
+3. **适配 DeepSeek Harness**：它只认根目录下一层的 `<名字>/SKILL.md`，所以把嵌套目录拆平；名字统一成小写加连字符；frontmatter 补上 `whenToUse`；去掉对 Claude 专属连接器和仓库内其他 skill 的依赖。
+4. **接进工作流**：每个 skill 都写明在 AIPM 工坊里读什么输入、产物放进哪个阶段目录，前后阶段能串起来。
+5. **补 AI 产品的内容**：比如 PRD 的「AI 能力边界」和评测样例、原型的 AI 状态清单、指标复盘的 AI 指标、上线复盘对照立项预测。
+6. **合并降噪**：系统提示词原本是 15 个独立 skill，合成一个入口加 15 份按需读的参考资料，避免技能目录被挤满、模型挑错 skill。
+7. **评测类统一加 `eval-` 前缀**，在技能列表里排在一起。
+
+## 来源与协议
+
+| skill | 上游 | 协议 | 作者 |
+|---|---|---|---|
+| `interview-script`、`retro` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | MIT | Paweł Huryn |
+| `research-synthesis`、`metrics-review` | [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) | Apache-2.0 | Anthropic |
+| `prd` | 融合 phuryn/pm-skills 的 `create-prd` 与 anthropics/knowledge-work-plugins 的 `write-spec` | MIT + Apache-2.0 | Paweł Huryn、Anthropic |
+| `prd-review` | [pmYangKun/check-prd-skill](https://github.com/pmYangKun/check-prd-skill) | Apache-2.0 | 杨堃 |
+| `html-wireframe`、`html-prototype` | [plannotator/effective-html](https://github.com/plannotator/effective-html) | MIT | plannotator |
+| `harness-patterns` | [keli-wen/agentic-harness-patterns-skill](https://github.com/keli-wen/agentic-harness-patterns-skill) | MIT | keli-wen |
+| `system-prompt-design` | [kangarooking/system-prompt-skills](https://github.com/kangarooking/system-prompt-skills) | MIT | kangarooking |
+| `eval-*`（7 个） | [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) | MIT | Hamel Husain |
+
+每个 skill 目录里都附有上游的 LICENSE（`prd-review` 另附原仓库的 NOTICE），每个 `SKILL.md` 开头写明了改编来源和改动。本仓库自己写的部分（README、`install.sh`、`prd` 里新增的内容和模板）用 MIT 协议，见 [LICENSE](LICENSE)。完整的第三方声明见 [NOTICE.md](NOTICE.md)。
+
+### 看过但没收进来的
+
+| 项目 | 原因 |
+|---|---|
+| deanpeters/Product-Manager-Skills | 质量高，但协议是 CC BY-NC-SA（禁止商用、改编后必须用同样的协议），只做参考 |
+| Fokkyp/claude-skills、chusimin/AIPM-Skills、amplitude/builder-skills | 没有写协议，法律上不能复用 |
+| anthropics/skills 的 docx / pptx / xlsx | DeepSeek Harness 已经自带 Office 三件套 |
+| phuryn/pm-skills 的其余 60 多个 | 和 Anthropic 版本重复，或者和 AI 产品关系不大；装太多会让模型挑错 skill |
