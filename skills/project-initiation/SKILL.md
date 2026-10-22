@@ -154,6 +154,11 @@ description: AI 产品立项教练。带用户从一句话想法或零散材料�
 
 - 每次站的状态变化（开始一站、过关卡、带待验证项通过、被卡住）都同步改 `aipm.json`，并刷新 `updated`。站状态取值：`not_started` / `in_progress` / `passed` / `passed_pending`（带待验证项通过）/ `blocked`。
 - 只改 `id` 为 `initiation` 的那一项，其他阶段原样保留。用读取再整体写回的方式改，保证文件始终是合法 JSON。
+- **待处理事项写进 `pending`**（规则见 `aipm-hub` 的 references/aipm-json.md，`stage` 填 `initiation`），面板会把它们列在最上面：
+  - 关卡上要用户拍板的事（例如以「待验证」状态通过某条、拍板语境里的资源和节点）→ `kind: decision`，`recommend` 写你的推荐；
+  - 第 05 站假设地图里最危险的 1～3 条假设 → `kind: assumption`，`recommend` 写对应实验卡的验证办法，`source` 指向 `01-立项/05-MVP范围表.md`；
+  - 成稿时报告里仍标「待验证」或列在「数据缺口」里的关键项 → `kind: gap`，`source` 指向 `01-立项/立项报告.md`。
+  - 站以 `passed_pending` 通过时，站的 `note` 写清待验证什么，不要只写「待确认」。
 - `00-项目档案.md` 仍是详细进度和证据台账的权威记录；`aipm.json` 只是给面板看的摘要，两者要一致。
 
 ## 边界

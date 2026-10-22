@@ -1,6 +1,6 @@
 # 第三方声明
 
-本仓库 `skills/` 下除 `aipm-hub`、`project-initiation` 两个原创 skill 外，其余内容改编自以下开源项目；`project-initiation` 的 v2 改进借鉴了下表最后三行的方法（改写，不是翻译）。每个 skill 目录内附有对应上游的许可证原文；Apache-2.0 项目的改编文件已在文件开头注明「相对原文有修改」。
+本仓库 `skills/` 下除 `aipm-hub`、`project-initiation`、`agent-architecture`、`build-launch` 四个原创 skill 外，其余内容改编自以下开源项目；`project-initiation` 的 v2 改进借鉴了下表最后三行的方法（改写，不是翻译）。每个 skill 目录内附有对应上游的许可证原文；Apache-2.0 项目的改编文件已在文件开头注明「相对原文有修改」。
 
 | 目录 | 上游项目 | 上游文件 | 许可证 | 版权 |
 |---|---|---|---|---|
