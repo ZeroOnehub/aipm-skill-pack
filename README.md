@@ -1,6 +1,6 @@
 # AIPM Skill Pack
 
-**AI 产品经理用的 21 个 Agent Skill，从立项一路覆盖到上线复盘。** 全部中文，按「立项 → PRD → 原型 → AI 方案 → 评测 → 复盘」六个阶段组织（阶段不要求按顺序走，总控按风险推荐下一步）：4 个 skill（总控、立项、架构方案、研发交接与上线检查）是我自己写的，17 个工具 skill 是从 7 个开源项目里挑出来改编的。任何认 `SKILL.md` 格式的 Agent 都能用（DeepSeek Harness、Claude Code、Codex、OpenClaw 等）。
+**AI 产品经理用的 22 个 Agent Skill，从立项一路覆盖到上线复盘，再接到写代码。** 全部中文，按「立项 → PRD → 原型 → AI 方案 → 评测 → 复盘」六个阶段组织（阶段不要求按顺序走，总控按风险推荐下一步）：5 个 skill（总控、立项、架构方案、研发交接与上线检查、代码对照验收）是我自己写的，17 个工具 skill 是从 7 个开源项目里挑出来改编的。任何认 `SKILL.md` 格式的 Agent 都能用（DeepSeek Harness、Claude Code、Codex、OpenClaw 等）。
 
 这套 skill 是 [拾阶](https://github.com/ZeroOnehub/aipm-workbench)（我基于 DeepSeek Harness 做的 AI 产品工作台）的全部 skill：总控按项目进度把活派给各阶段的 skill。单独拿出来也能用。
 
@@ -12,17 +12,19 @@
 |---|---|---|
 | 总控 | [`aipm-hub`](#aipm-hub总控) | 新建 / 打开项目，讲清走到哪一步，按风险推荐下一步，处理等你拍板的事，维护进度文件 `aipm.json` |
 | 01 立项 | [`project-initiation`](#project-initiation立项教练) | 六站立项教练，产出写给老板拍板的立项报告 |
+| | [`code-check`](#code-check代码对照验收与存量体检)（存量体检） | 已有代码的老产品，先看清它缺什么，再反推一份 PRD |
 | | [`interview-script`](#interview-script用户访谈提纲) | 写不带诱导的用户访谈提纲 |
 | | [`research-synthesis`](#research-synthesis调研综合) | 把访谈、问卷、反馈综合成带证据的洞察 |
-| 02 PRD | [`prd`](#prd写-ai-产品的-prd) | 分六站写 AI 产品 PRD，必须写清 AI 能力边界和评测样例 |
+| 02 PRD | [`prd`](#prd写-ai-产品的-prd) | 分六站写 AI 产品 PRD，必须写清 AI 能力边界、14 个 Agent 特征和评测样例 |
 | | [`prd-review`](#prd-reviewprd-质量审查) | 按 14 个维度给 PRD 挑刺 |
 | 03 原型交互 | [`html-wireframe`](#html-wireframe低保真线框图) | 低保真线框图，先对齐结构 |
 | | [`html-prototype`](#html-prototype高保真原型) | 高保真、能点的单文件原型 |
-| 04 AI 方案设计 | [`agent-architecture`](#agent-architectureai-产品架构方案) | 先判断要不要 Agent，再定模型成本、按固定规则选组件、画七层架构 |
+| 04 AI 方案设计 | [`agent-architecture`](#agent-architectureai-产品架构方案) | 先判断要不要 Agent，再定模型成本、按固定规则选组件、画七层架构，子代理独立审稿；加需求时只重判受影响的特征 |
 | | [`system-prompt-design`](#system-prompt-design系统提示词设计) | 用 15 个设计模式写系统提示词 |
-| | [`build-launch`](#build-launch研发交接与上线检查) | 交给研发前做 PRD 体检和交接包；上线前查埋点、灰度和是否表 |
+| | [`build-launch`](#build-launch研发交接与上线检查) | 交给研发前做 PRD 体检，把产品放进开发文件夹（规则卡、三份技术手册、自检脚本）；升版后同步；上线前查埋点、灰度和是否表 |
 | | [`harness-patterns`](#harness-patternsagent-harness-设计模式) | Agent 的记忆、权限、上下文、多 Agent 怎么设计 |
-| 05 评测 | [`eval-synthetic-data`](#eval-synthetic-data生成测试数据) | 按维度组合造测试数据 |
+| 05 评测 | [`code-check`](#code-check代码对照验收与存量体检)（对照验收） | 拿 PRD 和架构方案对照代码，列出先修什么 |
+| | [`eval-synthetic-data`](#eval-synthetic-data生成测试数据) | 按维度组合造测试数据 |
 | | [`eval-error-analysis`](#eval-error-analysis错误分析) | 读轨迹、归类失败，评测的第一步 |
 | | [`eval-judge-prompt`](#eval-judge-prompt写大模型评委) | 写只判通过 / 失败的大模型评委 |
 | | [`eval-validate-judge`](#eval-validate-judge校准评委) | 用 TPR / TNR 校准评委，修正线上通过率 |
@@ -96,7 +98,7 @@ cd aipm-skill-pack
 
 ### `prd`：写 AI 产品的 PRD
 
-- **干什么**：以立项报告为输入，分六站推进：对齐输入 → 写清价值 → 拆功能和故事 → 划 AI 能力边界 → 定指标和上线条件 → 成稿自检。默认写 1～3 页的精简版，每个 P0 功能都有 Given/When/Then 验收标准。AI 功能必须写清「AI 负责什么、不负责什么、错了怎么兜、人在哪接手」，并附至少 5 条评测样例。有关卡和红线，比如全是 P0、没有停止条件，都过不了。
+- **干什么**：以立项报告为输入，分六站推进：对齐输入 → 写清价值 → 拆功能和故事 → 划 AI 能力边界 → 定指标和上线条件 → 成稿自检。默认写 1～3 页的精简版，每个 P0 功能都有 Given/When/Then 验收标准。AI 功能必须写清「AI 负责什么、不负责什么、错了怎么兜、人在哪接手」，并附至少 5 条评测样例。AI 能力边界那一站还会过一遍 14 个 Agent 特征（会不会做收不回的事、要不要记住用户、要不要定时触发……）：PRD 里能判的自己判，判不出来的用大白话问你，写成特征表，架构方案直接拿它选组件。有关卡和红线，比如全是 P0、没有停止条件，都过不了。
 - **什么时候用**：立项通过后写需求；或者手上有个功能想法，要一份能拿去评审的文档。
 - **试试这样说**：「根据立项报告写 PRD。」/「我想做一个帮运营自动写周报的 AI 功能，帮我写个 PRD。」
 - **产出**：`PRD.md`、`00-PRD档案.md`（在拾阶里会同步更新右侧进度面板）
@@ -124,17 +126,24 @@ cd aipm-skill-pack
 
 ### `agent-architecture`：AI 产品架构方案
 
-- **干什么**：先做形态判断：这个产品是单次调用、固定流水线，还是真要做成 Agent（能不用 Agent 就不用）。然后定模型和单次成本、月成本。是 Agent 的，回答 14 个特征问题，用固定规则脚本从 17 个 Harness 组件里选型（同样的判断永远得到同样的选型，不让模型拍脑袋），再画七层架构，列工具清单、降级策略和可观测设计，最后把待确认问题写进待处理。
-- **什么时候用**：PRD 写到 AI 能力边界之后、交给研发之前；想知道 AI 部分怎么搭、要花多少钱。
-- **试试这样说**：「按 PRD 出个架构方案，先判断要不要做成 Agent。」
-- **产出**：`架构方案.md`、`architecture-features.json`
+- **干什么**：先做形态判断：这个产品是单次调用、固定流水线，还是真要做成 Agent（能不用 Agent 就不用）。然后定模型和单次成本、月成本。然后列五要素（工具、知识、观察、行动、权限）。是 Agent 的，把 PRD 里的特征表交给固定规则脚本，从 17 个 Harness 组件里选型（同样的判断永远得到同样的选型，不让模型拍脑袋），再画七层架构，列工具清单、降级策略和可观测设计。写完另开一个子代理当审稿人挑毛病，不过就改一轮再审。待确认问题分成「你来答」（改成大白话）和「研发判断」两类。PRD 加了新需求时走升版：只重判和新需求相关的特征，其余沿用上一版，输出选型变化和骨架待办。附 17 个组件的说明和可运行的最小实现，交接时按选型带给编码 AI。
+- **什么时候用**：PRD 写到 AI 能力边界之后、交给研发之前；想知道 AI 部分怎么搭、要花多少钱；加了新需求、方案要跟着改时。
+- **试试这样说**：「按 PRD 出个架构方案，先判断要不要做成 Agent。」「加了个每周推送的需求，方案要改吗？」
+- **产出**：`架构方案.md`、`architecture-features.json`、`迭代记录.md`
 
 ### `build-launch`：研发交接与上线检查
 
-- **干什么**：两种用法。研发交接：从研发视角给 PRD 做体检，把缺口分成「必须问」（一次不超过 5 个，每个都带推荐答案和不选的后果）和「可默认」，专门找技术上互相矛盾的要求（比如 5 秒返回和一次写三段理由），再产出给研发或编码 AI 用的交接包：按代码项目的结构摆好，带一张给编码 AI 的规则卡，拷出去就能开工。上线检查：上线前设计埋点、灰度和回滚，逐项填上线是否表，有一个「否」就不上线。
-- **什么时候用**：准备开工写代码时；准备给真实用户用之前。
-- **试试这样说**：「PRD 和架构方案定了，帮我准备研发交接。」「下周要灰度上线，帮我做上线检查。」
-- **产出**：`研发交接包/`（研发补全清单、研发 PRD、项目状态、交接说明）；`上线检查-<版本>.md`
+- **干什么**：三种用法。研发交接：从研发视角给 PRD 做体检，把缺口分成「必须问」（一次不超过 5 个，每个都带推荐答案和不选的后果）和「可默认」，专门找技术上互相矛盾的要求（比如 5 秒返回和一次写三段理由）；然后把产品放进一个开发文件夹：规则卡 `AGENTS.md`、通用技术栈 / 前端 / 上线部署三份手册、自检脚本 `verify.sh`、研发 PRD、决策台账、架构方案和选中组件的参考代码。用编码 AI 打开它，照规则走技术适配 → 后端 MVP → 正式前端 → 上线 → 收尾，每个阶段交证据包，测试、密钥、重启恢复、前端构建、文件齐全五项由脚本判。同步交接：PRD 或架构方案升版后，把新版本和骨架待办送进开发文件夹。上线检查：读开发文件夹里的上线证据，设计埋点、灰度和回滚，逐项填上线是否表，有一个「否」就不上线。
+- **什么时候用**：准备开工写代码时；开发中途来了新需求；准备给真实用户用之前。
+- **试试这样说**：「PRD 和架构方案定了，帮我准备研发交接。」「方案升版了，同步到开发。」「下周要灰度上线，帮我做上线检查。」
+- **产出**：`研发交接包/`（研发补全清单、研发 PRD、项目状态、交接说明）、开发文件夹里的产品文件夹；`上线检查-<版本>.md`
+
+### `code-check`：代码对照验收与存量体检
+
+- **干什么**：两种用法，都只读不改代码。对照验收：拿 PRD 和架构方案对照开发文件夹里的代码，跑 `verify.sh`，静态扫描 17 个组件的信号和六条落地标准的线索，再打开代码逐条确认；P0 验收标准和评测样例有没有测试覆盖，一条条列出来，最后给「先修什么」。存量体检：给一个已经写好的项目，反推它现在是什么、缺哪些机制、先补什么，再反推一份「本该有的 PRD」草稿。扫描只给线索，结论都要打开代码确认，「没扫到」和「确认没有」分开写。
+- **什么时候用**：编码 AI 交了 MVP、想知道是不是真按 PRD 做的；手上有一个老项目，想改版前先看清现状。
+- **试试这样说**：「对照 PRD 验收一下开发文件夹里的代码。」「帮我给这个项目做个体检：~/code/my-bot」
+- **产出**：`对照验收-<日期>.md`；`存量体检/差距报告.md`、`存量体检/反推PRD.md`
 
 ### `system-prompt-design`：系统提示词设计
 
@@ -238,9 +247,9 @@ cd aipm-skill-pack
 | `system-prompt-design` | [kangarooking/system-prompt-skills](https://github.com/kangarooking/system-prompt-skills) | MIT | kangarooking |
 | `eval-*`（7 个） | [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) | MIT | Hamel Husain |
 
-`aipm-hub`、`project-initiation`、`agent-architecture`、`build-launch` 是我自己写的。立项 v2 借鉴了 [hope138/enterprise-ai-project-assessor](https://github.com/hope138/enterprise-ai-project-assessor)、[caalvinz/opportunity-discovery-skill](https://github.com/caalvinz/opportunity-discovery-skill)、[phuryn/pm-skills](https://github.com/phuryn/pm-skills)（都是 MIT）的方法，文字是改写的，来源写在 `SKILL.md` 的「版本说明」和两份参考资料的开头。
+`aipm-hub`、`project-initiation`、`agent-architecture`、`build-launch`、`code-check` 是我自己写的。立项 v2 借鉴了 [hope138/enterprise-ai-project-assessor](https://github.com/hope138/enterprise-ai-project-assessor)、[caalvinz/opportunity-discovery-skill](https://github.com/caalvinz/opportunity-discovery-skill)、[phuryn/pm-skills](https://github.com/phuryn/pm-skills)（都是 MIT）的方法，文字是改写的，来源写在 `SKILL.md` 的「版本说明」和两份参考资料的开头。
 
-改编的 skill 目录里都附有上游的 LICENSE（`prd-review` 另附原仓库的 NOTICE），每个 `SKILL.md` 开头写明了改编来源和改动。本仓库自己写的部分（这 4 个 skill、README、`install.sh`、`prd` 里新增的内容和模板）用 MIT 协议，见 [LICENSE](LICENSE)。完整的第三方声明见 [NOTICE.md](NOTICE.md)。
+改编的 skill 目录里都附有上游的 LICENSE（`prd-review` 另附原仓库的 NOTICE），每个 `SKILL.md` 开头写明了改编来源和改动。本仓库自己写的部分（这 5 个 skill、README、`install.sh`、`prd` 里新增的内容和模板）用 MIT 协议，见 [LICENSE](LICENSE)。完整的第三方声明见 [NOTICE.md](NOTICE.md)。
 
 ### 看过但没收进来的
 

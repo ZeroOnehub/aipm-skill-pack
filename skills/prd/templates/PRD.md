@@ -90,6 +90,27 @@ flowchart LR
 | 人在哪接手 | |
 | 数据与隐私 | |
 
+### Agent 特征判断
+
+> 给第 04 阶段的架构方案用，写法见 prd skill 的 references/Agent特征快问.md。判断只写 需要 / 二期 / 不需要 / 待确认。
+
+| 特征 | 问的是什么 | 判断 | 依据 |
+|---|---|---|---|
+| `destructive_ops` | 收不回的操作、隐私数据 | | |
+| `audit_needed` | 拦截、留痕、埋点 | | |
+| `multi_step` | 先列计划再一步步做 | | |
+| `context_heavy` | 大量材料、分头查 | | |
+| `large_knowledge` | 专业资料多、按需翻 | | |
+| `long_sessions` | 聊很久、记录很多 | | |
+| `cross_session_memory` | 记住用户 | | |
+| `persistent_goals` | 好几天的大任务 | | |
+| `slow_operations` | 几分钟以上的慢步骤 | | |
+| `scheduled` | 到点自动做事 | | |
+| `parallel_isolated` | 多个 AI 分工 | | |
+| `external_ecosystem` | 一整套外部工具或插件 | | |
+| `fixed_orchestration` | 每次固定顺序 | | |
+| `auto_completion` | AI 自己判断做完没有 | | |
+
 ## 10. 评测样例
 
 | # | 类型 | 输入 | 期望行为 | 判定方式 |

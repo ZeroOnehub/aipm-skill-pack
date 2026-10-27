@@ -69,6 +69,7 @@
 | `stages[].note` | 否 | 一句话备注，面板悬停显示 |
 | `stages[].stations` | 否 | 阶段内各站，由阶段 skill 自己定义和维护 |
 | `pending` | 否 | 待处理事项：等用户拍板的决定、待验证的假设、证据缺口、卡住的事。面板顶部「待处理」列表读它，见下文 |
+| `build` | 否 | 研发交接以后才有：产品在开发文件夹里的位置。面板的「研发进度」卡读它，见下文 |
 
 阶段 `id` 与目录：`initiation`→`01-立项`、`prd`→`02-PRD`、`prototype`→`03-原型交互`、`ai-design`→`04-AI方案设计`、`evaluation`→`05-评测`、`launch-review`→`06-上线复盘`。
 
@@ -107,6 +108,32 @@
 - **同时开着的决定不超过 5 个**。多了说明在一次性甩问题，先挑会改变目标用户、范围、成本、安全、隐私的问，其余用默认值填上并写明理由。
 - **用户回复后**：把该项改为 `resolved` 并写 `resolution`，再把结论落进对应产出物。已解决的项不删，留作决策记录，复盘时要用。
 - 阶段 skill 只增改自己阶段的项（看 `stage`）；总控可以改任何项。
+
+## 研发轨道（build）
+
+研发交接时由 `build-launch` 写入（它的安装脚本会打印这一段），之后总控刷新 `stage` 和 `checked`：
+
+```json
+"build": {
+  "path": "/Users/<你>/Documents/project/AI Workbench/开发/projects/会议纪要助手",
+  "kit": "/Users/<你>/Documents/project/AI Workbench/开发",
+  "name": "会议纪要助手",
+  "tool": "Claude Code",
+  "handoff": "2026-10-26",
+  "synced": "2026-11-02",
+  "stage": "2 后端 MVP（第 1 阶段）",
+  "checked": "2026-11-03"
+}
+```
+
+| 字段 | 必填 | 说明 |
+|---|---|---|
+| `path` | 是 | 产品文件夹的**绝对路径**。面板直接读它下面的 `docs/项目状态.md` 和最新证据包 |
+| `kit` | 是 | 开发文件夹（`AGENTS.md`、`verify.sh` 所在的那一层）的绝对路径 |
+| `name` | 是 | 开发文件夹里的产品名，就是 `projects/` 下的文件夹名 |
+| `tool` | 否 | 谁来写代码：Claude Code、Codex、Pi、研发团队…… |
+| `handoff` / `synced` | 否 | 第一次交接、最近一次同步交接的日期 |
+| `stage` / `checked` | 否 | 总控上次读到的研发阶段（`项目状态.md` 里「- 阶段：」那一行）和读的日期；面板读不到开发文件夹时显示它 |
 
 ## 写入规则
 
