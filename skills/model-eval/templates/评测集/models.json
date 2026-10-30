@@ -1,0 +1,8 @@
+{
+  "models": [
+    {"name": "候选A", "base_url": "https://api.example-a.com/v1", "model": "{{接口里的模型名}}", "key_env": "VENDOR_A_API_KEY", "price_in": 0, "price_out": 0, "currency": "CNY"},
+    {"name": "候选B", "base_url": "https://api.example-b.com/v1", "model": "{{接口里的模型名}}", "key_env": "VENDOR_B_API_KEY", "price_in": 0, "price_out": 0, "currency": "CNY"},
+    {"name": "评审", "base_url": "https://api.example-c.com/v1", "model": "{{接口里的模型名}}", "key_env": "VENDOR_C_API_KEY", "price_in": 0, "price_out": 0, "currency": "CNY"}
+  ],
+  "judge": "评审"
+}

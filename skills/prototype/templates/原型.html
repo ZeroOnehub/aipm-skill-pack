@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{产品名}} · 可点击原型</title>
+<style>
+  :root { --ink:#1f2328; --muted:#656d76; --line:#d0d7de; --soft:#f6f8fa; --accent:#1a73e8; --ai:#e8f0fe; --warn:#fff4e5; --err:#fde2e1; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.6 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; color:var(--ink); background:#fff; }
+  [data-page] { display:none; min-height:100vh; }
+  [data-page].on { display:block; }
+  .shell { display:grid; grid-template-columns:220px 1fr; min-height:100vh; }
+  .shell.ai { grid-template-columns:220px 1fr 360px; }
+  nav.side { border-right:1px solid var(--line); padding:16px; background:var(--soft); }
+  nav.side a { display:block; padding:6px 8px; border-radius:6px; color:inherit; text-decoration:none; cursor:pointer; }
+  nav.side a:hover { background:#fff; }
+  .main { padding:24px 32px; }
+  .panel { border-left:1px solid var(--line); padding:16px; background:#fcfcfd; }
+  h1 { font-size:20px; margin:0 0 16px; }
+  button, .btn { font:inherit; border:1px solid var(--line); background:#fff; border-radius:6px; padding:6px 14px; cursor:pointer; }
+  .primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  input, textarea { font:inherit; border:1px solid var(--line); border-radius:6px; padding:8px 10px; width:100%; }
+  .card { border:1px solid var(--line); border-radius:8px; padding:12px 16px; margin:8px 0; }
+  .ai-text { background:var(--ai); border-radius:4px; padding:0 2px; }
+  .hint { color:var(--muted); font-size:13px; }
+  .warn { background:var(--warn); border-radius:8px; padding:10px 12px; }
+  .err { background:var(--err); border-radius:8px; padding:10px 12px; }
+  .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .spin { display:inline-block; width:12px; height:12px; border:2px solid var(--line); border-top-color:var(--accent); border-radius:50%; animation:spin 0.8s linear infinite; vertical-align:-2px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  [data-states] > [data-state] { display:none; }
+  [data-states] > [data-state].on { display:block; }
+  #states { position:fixed; right:16px; bottom:16px; z-index:10; width:260px; max-height:60vh; overflow:auto; background:#fff; border:1px solid var(--line); border-radius:10px; box-shadow:0 6px 24px rgba(0,0,0,.12); font-size:13px; }
+  #states header { display:flex; justify-content:space-between; padding:8px 12px; border-bottom:1px solid var(--line); cursor:pointer; font-weight:600; }
+  #states .body { padding:8px 12px; }
+  #states .group { margin:6px 0 10px; }
+  #states .group b { display:block; color:var(--muted); font-weight:500; margin-bottom:4px; }
+  #states .group button { padding:2px 8px; margin:2px; font-size:12px; }
+  #states .group button.on { border-color:var(--accent); color:var(--accent); }
+  #states.closed .body { display:none; }
+</style>
+</head>
+<body>
+
+<!-- 一页一个 section：data-page 写页面编号，data-title 写页面名。跳转：任意元素加 data-go="P02"。 -->
+<section data-page="P01" data-title="{{页面名}}">
+  <div class="shell">
+    <nav class="side"><b>{{产品名}}</b><a data-go="P01">{{首页}}</a></nav>
+    <div class="main">
+      <h1>{{页面标题}}</h1>
+      <!-- 有多种状态的区域：data-states 写区域名，子块 data-state 写状态名，第一个是默认 -->
+      <div data-states="列表">
+        <div data-state="正常">
+          <div class="card" data-go="P02">{{真实感的条目}}</div>
+          <div class="card">{{一条超长的标题，看看布局会不会被撑坏……}}</div>
+        </div>
+        <div data-state="空"><p class="hint">{{空状态文案和引导}}</p><button class="primary" data-go="P02">{{主操作}}</button></div>
+        <div data-state="加载中"><span class="spin"></span> 加载中…</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-page="P02" data-title="{{AI 工作页}}">
+  <div class="shell ai">
+    <nav class="side"><b>{{产品名}}</b><a data-go="P01">← 返回</a></nav>
+    <div class="main">
+      <h1>{{页面标题}}</h1>
+      <div data-states="AI 生成">
+        <div data-state="待触发"><button class="primary" onclick="demoGenerate(this)">{{生成}}</button></div>
+        <div data-state="流式输出中"><div class="hint"><span class="spin"></span> 正在生成：{{第 2 / 5 部分}}</div><p class="ai-text" id="stream-demo"></p><button onclick="fakeStream(document.getElementById('stream-demo'), '{{一段演示用的生成内容}}')">重放</button> <button>停止生成</button></div>
+        <div data-state="完成"><p class="ai-text">{{AI 生成的内容}}</p><div class="row"><button>👍 采纳</button><button>👎 不采纳</button><button>重新生成</button></div></div>
+        <div data-state="部分完成"><p class="ai-text">{{成功的部分}}</p><p class="warn">[待补充：{{需要××数据}}]</p></div>
+        <div data-state="失败"><p class="err">{{PRD 兜底策略里的提示原文}}</p><button class="primary">重新生成</button></div>
+        <div data-state="没找到依据"><p class="warn">{{未找到匹配资料，是否用通用知识撰写？}}</p><div class="row"><button>用通用知识写（会标注）</button><button>补充资料</button></div></div>
+      </div>
+    </div>
+    <aside class="panel"><b>{{AI 助手}}</b><p class="hint">{{右侧面板的内容}}</p></aside>
+  </div>
+</section>
+
+<div id="states"><header onclick="this.parentElement.classList.toggle('closed')"><span>状态</span><span id="page-name"></span></header><div class="body"></div></div>
+
+<script>
+  const pages = [...document.querySelectorAll('[data-page]')]
+  const panel = document.querySelector('#states .body')
+  function setState(area, name) {
+    area.querySelectorAll(':scope > [data-state]').forEach(s => s.classList.toggle('on', s.dataset.state === name))
+  }
+  function show(id) {
+    const page = pages.find(p => p.dataset.page === id) ?? pages[0]
+    pages.forEach(p => p.classList.toggle('on', p === page))
+    if (location.hash.slice(1) !== page.dataset.page) history.replaceState(null, '', '#' + page.dataset.page)
+    document.getElementById('page-name').textContent = page.dataset.page + ' ' + (page.dataset.title ?? '')
+    panel.replaceChildren()
+    page.querySelectorAll('[data-states]').forEach(area => {
+      const group = document.createElement('div')
+      group.className = 'group'
+      group.innerHTML = '<b></b>'
+      group.firstChild.textContent = area.dataset.states
+      area.querySelectorAll(':scope > [data-state]').forEach(s => {
+        const b = document.createElement('button')
+        b.textContent = s.dataset.state
+        b.onclick = () => { setState(area, s.dataset.state); group.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)) }
+        if (s.classList.contains('on')) b.classList.add('on')
+        group.append(b)
+      })
+      panel.append(group)
+    })
+    if (!panel.children.length) panel.innerHTML = '<span class="hint">这一页没有可切换的状态</span>'
+    window.scrollTo(0, 0)
+  }
+  document.querySelectorAll('[data-states]').forEach(area => {
+    const first = area.querySelector(':scope > [data-state]')
+    if (first) setState(area, first.dataset.state)
+  })
+  document.addEventListener('click', e => {
+    const go = e.target.closest('[data-go]')
+    if (go) { e.preventDefault(); show(go.dataset.go) }
+  })
+  addEventListener('hashchange', () => show(location.hash.slice(1)))
+  show(location.hash.slice(1))
+
+  /** 逐字演示流式输出。 */
+  function fakeStream(el, text, speed = 30) {
+    el.textContent = ''
+    let i = 0
+    const timer = setInterval(() => { el.textContent += text[i++] ?? ''; if (i >= text.length) clearInterval(timer) }, speed)
+  }
+  /** 逐步演示多环节进度：steps 是文案数组。 */
+  function fakeProgress(el, steps, ms = 900) {
+    steps.forEach((s, i) => setTimeout(() => { el.textContent = s }, i * ms))
+  }
+  /** 示例：点「生成」后切到流式，再切到完成。 */
+  function demoGenerate(btn) {
+    const area = btn.closest('[data-states]')
+    setState(area, '流式输出中')
+    fakeStream(document.getElementById('stream-demo'), '{{一段演示用的生成内容}}')
+    setTimeout(() => setState(area, '完成'), 2500)
+    show(location.hash.slice(1))
+  }
+</script>
+</body>
+</html>

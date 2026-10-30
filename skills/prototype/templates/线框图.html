@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{产品名}} · 线框图</title>
+<style>
+  :root { --ink:#222; --line:#9aa0a6; --soft:#e8eaed; --bg:#f6f7f9; --accent:#1a73e8; --note:#b3261e; --w:1440px; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:14px/1.5 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; color:var(--ink); background:var(--bg); }
+  header.bar { position:sticky; top:0; z-index:5; display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:10px 16px; background:#fff; border-bottom:1px solid var(--soft); }
+  header.bar strong { margin-right:12px; }
+  header.bar button { border:1px solid var(--soft); background:#fff; border-radius:6px; padding:4px 10px; cursor:pointer; font:inherit; }
+  header.bar button[aria-current="true"] { border-color:var(--accent); color:var(--accent); }
+  main { padding:24px 16px 80px; }
+  .page { display:none; max-width:var(--w); margin:0 auto; }
+  .page.on { display:block; }
+  .page > h2 { margin:0 0 12px; font-size:18px; }
+  .canvas { background:#fff; border:1px solid var(--line); min-height:720px; display:grid; grid-template-columns:220px 1fr 360px; grid-template-rows:56px 1fr; }
+  .canvas.single { grid-template-columns:1fr; }
+  .canvas.two { grid-template-columns:220px 1fr; }
+  .canvas > .top { grid-column:1 / -1; }
+  .box { border:1px dashed var(--line); padding:12px; position:relative; }
+  .box > .label { position:absolute; top:4px; right:8px; color:var(--line); font-size:12px; }
+  .ph { background:var(--soft); border-radius:4px; min-height:16px; margin:6px 0; }
+  .ph.l { min-height:120px; } .ph.m { min-height:56px; }
+  .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .btn { display:inline-block; border:1px solid var(--line); border-radius:6px; padding:4px 12px; background:#fff; }
+  .btn.primary { border-color:var(--accent); background:var(--accent); color:#fff; }
+  .input { border:1px solid var(--line); border-radius:6px; padding:6px 10px; color:#80868b; min-width:240px; }
+  .list > div { border-bottom:1px solid var(--soft); padding:8px 0; }
+  .mark { display:inline-grid; place-items:center; width:18px; height:18px; border-radius:50%; background:var(--note); color:#fff; font-size:11px; font-weight:600; vertical-align:middle; margin:0 4px; }
+  .variants { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:12px; margin-top:16px; }
+  .variant { background:#fff; border:1px solid var(--line); padding:12px; min-height:140px; }
+  .variant > b { display:block; margin-bottom:6px; color:var(--note); }
+  .notes { margin-top:16px; background:#fff; border:1px solid var(--soft); padding:12px 16px; }
+  .notes li { margin:4px 0; }
+  .notes li::marker { color:var(--note); font-weight:600; }
+</style>
+</head>
+<body>
+<header class="bar"><strong>{{产品名}} · 线框图</strong><span id="tabs"></span></header>
+<main>
+
+  <!-- 一页一个 section：data-id 写页面编号，h2 写「编号 页面名」 -->
+  <section class="page" data-id="P01">
+    <h2>P01 {{页面名}}</h2>
+    <div class="canvas two">
+      <div class="box top"><span class="label">页头</span><div class="row"><b>{{产品名}}</b><span class="input">搜索……</span></div></div>
+      <div class="box"><span class="label">导航</span><div class="ph"></div><div class="ph"></div><div class="ph"></div></div>
+      <div class="box"><span class="label">主内容</span>
+        <div class="row"><h3 style="margin:0">{{标题}}</h3><span class="btn primary">{{主操作}}</span><span class="mark">1</span></div>
+        <div class="list"><div>{{真实长度的列表项}}</div><div>{{一条超长的标题，看看会不会把布局撑坏……}}</div><div>{{空字段：—}}</div></div>
+      </div>
+    </div>
+    <div class="variants">
+      <div class="variant"><b>空状态</b>{{什么时候出现、显示什么、引导做什么}}</div>
+      <div class="variant"><b>加载中</b><div class="ph m"></div></div>
+      <div class="variant"><b>出错</b>{{提示原文}} <span class="btn">重试</span></div>
+    </div>
+    <ol class="notes">
+      <li>{{这里发生什么}}（PRD {{功能}}）</li>
+    </ol>
+  </section>
+
+</main>
+<script>
+  const pages = [...document.querySelectorAll('.page')]
+  const tabs = document.getElementById('tabs')
+  function show(id) {
+    pages.forEach(p => p.classList.toggle('on', p.dataset.id === id))
+    tabs.querySelectorAll('button').forEach(b => b.setAttribute('aria-current', String(b.dataset.id === id)))
+    if (location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id)
+  }
+  pages.forEach(p => {
+    const b = document.createElement('button')
+    b.dataset.id = p.dataset.id
+    b.textContent = p.querySelector('h2')?.textContent ?? p.dataset.id
+    b.onclick = () => show(p.dataset.id)
+    tabs.append(b, ' ')
+  })
+  show(pages.some(p => p.dataset.id === location.hash.slice(1)) ? location.hash.slice(1) : pages[0]?.dataset.id)
+</script>
+</body>
+</html>

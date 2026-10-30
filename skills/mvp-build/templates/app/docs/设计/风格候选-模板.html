@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{产品名}} · 风格候选</title>
+<style>
+  /* 每个方向一组变量：data-style 对应顶部切换按钮。只改变量，代表页的结构所有方向共用。 */
+  [data-style="A"] { --bg:#ffffff; --surface:#f7f8fa; --ink:#1f2328; --muted:#656d76; --line:#d8dee4; --primary:#1a56db; --on-primary:#fff; --ai:#eef4ff; --ai-ink:#1a56db; --ok:#1a7f37; --warn:#9a6700; --err:#cf222e; --radius:6px; --gap:12px; --font:-apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; --shadow:none; }
+  [data-style="B"] { --bg:#fffaf5; --surface:#fff3e8; --ink:#2b2118; --muted:#7a6a5c; --line:#ecdccb; --primary:#d9622b; --on-primary:#fff; --ai:#fff1e6; --ai-ink:#b3501f; --ok:#2f7d4a; --warn:#a86b00; --err:#c4372c; --radius:14px; --gap:16px; --font:-apple-system, "PingFang SC", sans-serif; --shadow:0 4px 16px rgba(120,70,30,.08); }
+  [data-style="C"] { --bg:#0f1115; --surface:#171a21; --ink:#e6e8eb; --muted:#9aa1ab; --line:#2a2f39; --primary:#7c5cff; --on-primary:#fff; --ai:#1f1a33; --ai-ink:#b9a8ff; --ok:#3fb950; --warn:#d29922; --err:#f85149; --radius:10px; --gap:12px; --font:-apple-system, "PingFang SC", sans-serif; --shadow:0 0 0 1px #2a2f39; }
+
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.6 -apple-system, "PingFang SC", sans-serif; background:#eceef1; color:#1f2328; }
+  .switch { position:sticky; top:0; z-index:5; display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:10px 16px; background:#fff; border-bottom:1px solid #d8dee4; }
+  .switch button { font:inherit; border:1px solid #d8dee4; background:#fff; border-radius:6px; padding:4px 12px; cursor:pointer; }
+  .switch button[aria-pressed="true"] { border-color:#1a56db; color:#1a56db; font-weight:600; }
+  .direction { display:none; padding:24px 16px 48px; }
+  .direction.on { display:block; }
+  .about { max-width:1200px; margin:0 auto 16px; background:#fff; border:1px solid #d8dee4; border-radius:8px; padding:12px 16px; }
+  .about h2 { margin:0 0 4px; font-size:16px; }
+  .about dl { display:grid; grid-template-columns:100px 1fr; gap:4px 12px; margin:8px 0 0; }
+  .about dt { color:#656d76; }
+  .about dd { margin:0; }
+
+  /* 代表页：只用变量 */
+  .page { max-width:1200px; margin:0 auto; background:var(--bg); color:var(--ink); font-family:var(--font); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--line); }
+  .top { display:flex; align-items:center; gap:var(--gap); padding:12px 20px; border-bottom:1px solid var(--line); }
+  .top b { font-size:16px; }
+  .top .spacer { flex:1; }
+  .body { display:grid; grid-template-columns:220px 1fr 320px; min-height:560px; }
+  .nav { background:var(--surface); border-right:1px solid var(--line); padding:var(--gap); }
+  .nav div { padding:6px 10px; border-radius:var(--radius); color:var(--muted); }
+  .nav .cur { background:var(--bg); color:var(--ink); font-weight:600; }
+  .main { padding:20px 24px; display:grid; gap:var(--gap); align-content:start; }
+  .side { border-left:1px solid var(--line); padding:var(--gap); background:var(--surface); display:grid; gap:var(--gap); align-content:start; }
+  .btn { font:inherit; border:1px solid var(--line); background:var(--bg); color:var(--ink); border-radius:var(--radius); padding:6px 14px; cursor:pointer; }
+  .btn.primary { background:var(--primary); border-color:var(--primary); color:var(--on-primary); }
+  .card { border:1px solid var(--line); border-radius:var(--radius); padding:12px 16px; background:var(--bg); }
+  .ai { background:var(--ai); border-radius:var(--radius); padding:12px 16px; border-left:3px solid var(--ai-ink); }
+  .ai .tag { color:var(--ai-ink); font-size:12px; font-weight:600; }
+  .cite { display:inline-block; font-size:12px; color:var(--ai-ink); border:1px solid var(--ai-ink); border-radius:999px; padding:0 6px; margin-left:4px; }
+  .todo { color:var(--warn); }
+  .err { color:var(--err); border:1px solid var(--err); border-radius:var(--radius); padding:8px 12px; }
+  .muted { color:var(--muted); }
+  table { width:100%; border-collapse:collapse; }
+  th, td { text-align:left; padding:8px; border-bottom:1px solid var(--line); }
+  th { color:var(--muted); font-weight:500; }
+  .cursor { display:inline-block; width:7px; height:1em; background:var(--ai-ink); vertical-align:-2px; animation:blink 1s step-end infinite; }
+  @keyframes blink { 50% { opacity:0; } }
+</style>
+</head>
+<body>
+<div class="switch"><b>{{产品名}} · 风格候选</b><span id="buttons"></span><span class="muted" style="margin-left:auto">代表页：{{P0x 页面名}}</span></div>
+
+<!-- 每个方向一个 section：data-style 和上面 CSS 的变量组对应，data-name 是按钮上的名字 -->
+<section class="direction" data-style="A" data-name="A · {{方向名，如 克制专业}}">
+  <div class="about">
+    <h2>A · {{方向名}}</h2>
+    <dl>
+      <dt>参考来源</dt><dd>{{链接 1：借鉴了什么}}；{{链接 2}}</dd>
+      <dt>适合的理由</dt><dd>{{和用户、场景的关系}}</dd>
+      <dt>可能的问题</dt><dd>{{}}</dd>
+    </dl>
+  </div>
+  <div class="page" data-page></div>
+</section>
+<section class="direction" data-style="B" data-name="B · {{方向名}}">
+  <div class="about"><h2>B · {{方向名}}</h2><dl><dt>参考来源</dt><dd></dd><dt>适合的理由</dt><dd></dd><dt>可能的问题</dt><dd></dd></dl></div>
+  <div class="page" data-page></div>
+</section>
+<section class="direction" data-style="C" data-name="C · {{方向名}}">
+  <div class="about"><h2>C · {{方向名}}</h2><dl><dt>参考来源</dt><dd></dd><dt>适合的理由</dt><dd></dd><dt>可能的问题</dt><dd></dd></dl></div>
+  <div class="page" data-page></div>
+</section>
+
+<!-- 代表页只写一次，脚本复制到每个方向里。必须包含：主操作、AI 内容（标识 + 溯源）、流式状态、错误提示、表格或列表。 -->
+<template id="page">
+  <div class="top"><b>{{产品名}}</b><span class="muted">{{当前位置}}</span><span class="spacer"></span><button class="btn">{{次要操作}}</button><button class="btn primary">{{主操作}}</button></div>
+  <div class="body">
+    <nav class="nav"><div class="cur">{{当前页}}</div><div>{{导航项}}</div><div>{{导航项}}</div></nav>
+    <main class="main">
+      <h2 style="margin:0">{{真实的标题}}</h2>
+      <div class="ai"><div class="tag">AI 生成</div>{{一段真实感的 AI 内容}}<span class="cite">来源 1</span> <span class="todo">[待补充：{{需要××数据}}]</span></div>
+      <div class="ai"><div class="tag">正在生成：{{第 3 / 5 部分}}</div>{{生成中的内容}}<span class="cursor"></span></div>
+      <div class="err">{{PRD 兜底策略里的错误提示原文}} <button class="btn">重试</button></div>
+      <div class="card"><table><thead><tr><th>{{列}}</th><th>{{列}}</th><th>{{状态}}</th></tr></thead><tbody><tr><td>{{}}</td><td>{{}}</td><td>{{}}</td></tr><tr><td>{{}}</td><td>{{}}</td><td>{{}}</td></tr></tbody></table></div>
+    </main>
+    <aside class="side"><b>{{AI 助手}}</b><div class="card">{{对话或参考资料}}</div><div class="row"><button class="btn">👍 采纳</button> <button class="btn">👎 不采纳</button></div></aside>
+  </div>
+</template>
+
+<script>
+  const sections = [...document.querySelectorAll('.direction')]
+  const tpl = document.getElementById('page')
+  sections.forEach(s => s.querySelector('[data-page]').append(tpl.content.cloneNode(true)))
+  const box = document.getElementById('buttons')
+  function show(style) {
+    sections.forEach(s => s.classList.toggle('on', s.dataset.style === style))
+    box.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.style === style)))
+    history.replaceState(null, '', '#' + style)
+  }
+  sections.forEach(s => {
+    const b = document.createElement('button')
+    b.dataset.style = s.dataset.style
+    b.textContent = s.dataset.name
+    b.onclick = () => show(s.dataset.style)
+    box.append(b, ' ')
+  })
+  show(sections.some(s => s.dataset.style === location.hash.slice(1)) ? location.hash.slice(1) : sections[0].dataset.style)
+</script>
+</body>
+</html>
