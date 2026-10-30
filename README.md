@@ -233,29 +233,3 @@ cd aipm-skill-pack
 5. **补 AI 产品的内容**：比如 PRD 的「AI 能力边界」和评测样例、原型的 AI 状态清单、指标复盘的 AI 指标、上线复盘对照立项预测。
 6. **合并降噪**：系统提示词原本是 15 个独立 skill，合成一个入口加 15 份按需读的参考资料，避免技能目录被挤满、模型挑错 skill。
 7. **评测类统一加 `eval-` 前缀**，在技能列表里排在一起。
-
-## 来源与协议
-
-| skill | 上游 | 协议 | 作者 |
-|---|---|---|---|
-| `interview-script`、`retro` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | MIT | Paweł Huryn |
-| `research-synthesis`、`metrics-review` | [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) | Apache-2.0 | Anthropic |
-| `prd` | 融合 phuryn/pm-skills 的 `create-prd` 与 anthropics/knowledge-work-plugins 的 `write-spec` | MIT + Apache-2.0 | Paweł Huryn、Anthropic |
-| `prd-review` | [pmYangKun/check-prd-skill](https://github.com/pmYangKun/check-prd-skill) | Apache-2.0 | 杨堃 |
-| `html-wireframe`、`html-prototype` | [plannotator/effective-html](https://github.com/plannotator/effective-html) | MIT | plannotator |
-| `harness-patterns` | [keli-wen/agentic-harness-patterns-skill](https://github.com/keli-wen/agentic-harness-patterns-skill) | MIT | keli-wen |
-| `system-prompt-design` | [kangarooking/system-prompt-skills](https://github.com/kangarooking/system-prompt-skills) | MIT | kangarooking |
-| `eval-*`（7 个） | [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills) | MIT | Hamel Husain |
-
-`aipm-hub`、`project-initiation`、`agent-architecture`、`build-launch`、`code-check` 是我自己写的。立项 v2 借鉴了 [hope138/enterprise-ai-project-assessor](https://github.com/hope138/enterprise-ai-project-assessor)、[caalvinz/opportunity-discovery-skill](https://github.com/caalvinz/opportunity-discovery-skill)、[phuryn/pm-skills](https://github.com/phuryn/pm-skills)（都是 MIT）的方法，文字是改写的，来源写在 `SKILL.md` 的「版本说明」和两份参考资料的开头。
-
-改编的 skill 目录里都附有上游的 LICENSE（`prd-review` 另附原仓库的 NOTICE），每个 `SKILL.md` 开头写明了改编来源和改动。本仓库自己写的部分（这 5 个 skill、README、`install.sh`、`prd` 里新增的内容和模板）用 MIT 协议，见 [LICENSE](LICENSE)。完整的第三方声明见 [NOTICE.md](NOTICE.md)。
-
-### 看过但没收进来的
-
-| 项目 | 原因 |
-|---|---|
-| deanpeters/Product-Manager-Skills | 质量高，但协议是 CC BY-NC-SA（禁止商用、改编后必须用同样的协议），只做参考 |
-| Fokkyp/claude-skills、chusimin/AIPM-Skills、amplitude/builder-skills | 没有写协议，法律上不能复用 |
-| anthropics/skills 的 docx / pptx / xlsx | DeepSeek Harness 已经自带 Office 三件套 |
-| phuryn/pm-skills 的其余 60 多个 | 和 Anthropic 版本重复，或者和 AI 产品关系不大；装太多会让模型挑错 skill |
